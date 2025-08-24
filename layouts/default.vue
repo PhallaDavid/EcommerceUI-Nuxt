@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-950 flex flex-col">
+  <div class="min-h-screen bg-white flex flex-col">
     <Header></Header>
 
     <div class="flex flex-1">
@@ -12,7 +12,9 @@
           class="fixed top-0 left-0 w-64 h-full bg-gray-50 border-r border-gray-300 p-4 z-50 md:hidden"
         />
       </transition>
-      <main class="flex-1 max-w-7xl mx-auto justify-center items-center bg-gray-950 p-6">
+      <main
+        class="flex-1 max-w-7xl mx-auto justify-center items-center bg-white p-6"
+      >
         <slot />
       </main>
     </div>

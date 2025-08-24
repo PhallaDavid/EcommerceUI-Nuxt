@@ -1,14 +1,14 @@
 <template>
   <div class="flex justify-center p-4">
     <div
-      class="flex w-96 flex-col gap-2 rounded-lg border-1 border-gray-200 bg-gray-100 p-2 shadow-lg"
+      class="flex w-50 h-auto flex-col gap-2 rounded-lg border-1 border-gray-200 bg-gray-100 p-2 shadow-lg"
     >
-      <!-- Image container with relative positioning -->
+      <!-- Image container -->
       <div class="relative">
         <img
-          class="h-64 w-full rounded-lg object-cover"
-          src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Shoes"
+          class="h-30 w-full rounded-lg object-cover"
+          :src="product.image"
+          :alt="product.name"
         />
         <!-- Favorite Heart -->
         <span class="absolute top-2 right-2 cursor-pointer">
@@ -30,16 +30,20 @@
 
       <!-- Product Info -->
       <div class="flex justify-between pr-2 pl-2">
-        <h1 class="text-xl font-semibold text-gray-700">AirPods Max</h1>
-        <h1 class="text-sm font-semibold text-gray-700">$599.00</h1>
+        <h1 class="text-xl font-semibold text-gray-700">{{ product.name }}</h1>
+        <h1 class="text-sm font-semibold text-gray-700">
+          ${{ product.price }}
+        </h1>
       </div>
-      <span class="pl-2 text-xs text-gray-600"
-        >A perfect balance of high-fidelity audio</span
-      >
+      <span class="pl-2 text-xs text-gray-600">
+        {{ product.description }}
+      </span>
 
       <!-- Ratings -->
       <div class="flex flex-row gap-1 pl-2">
         <svg
+          v-for="i in 5"
+          :key="i"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           class="h-4 w-4"
@@ -49,37 +53,7 @@
             fill="#065f46"
           />
         </svg>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          class="h-4 w-4"
-        >
-          <polygon
-            points="12,2 15,9 22,9 17,14 18.5,21 12,17 5.5,21 7,14 2,9 9,9"
-            fill="#065f46"
-          />
-        </svg>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          class="h-4 w-4"
-        >
-          <polygon
-            points="12,2 15,9 22,9 17,14 18.5,21 12,17 5.5,21 7,14 2,9 9,9"
-            fill="#065f46"
-          />
-        </svg>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          class="h-4 w-4"
-        >
-          <polygon
-            points="12,2 15,9 22,9 17,14 18.5,21 12,17 5.5,21 7,14 2,9 9,9"
-            fill="#065f46"
-          />
-        </svg>
-        <span class="text-xs text-gray-600">(121)</span>
+        <span class="text-xs text-gray-600">({{ product.reviews }})</span>
       </div>
 
       <!-- Add to Cart -->
@@ -91,3 +65,18 @@
     </div>
   </div>
 </template>
+
+<script>
+import loading from "../loading.vue";
+export default {
+  components: {
+    loading,
+  },
+  props: {
+    product: {
+      type: Object,
+      required: true,
+    },
+  },
+};
+</script>
