@@ -77,17 +77,17 @@
         </div>
 
         <nuxt-link
-          to="/products"
+          to="/"
           class="text-sm font-semibold text-gray-800 hover:text-green-700"
           >Products</nuxt-link
         >
         <nuxt-link
-          to="/about"
+          to="/"
           class="text-sm font-semibold text-gray-800 hover:text-green-700"
           >About Us</nuxt-link
         >
         <nuxt-link
-          to="/contact"
+          to="/"
           class="text-sm font-semibold text-gray-800 hover:text-green-700"
           >Contact</nuxt-link
         >
@@ -135,7 +135,7 @@
           </span>
         </button>
 
-        <nuxt-link to="/cart" class="relative">
+        <nuxt-link to="/" class="relative">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6 text-gray-800 hover:text-green-300"

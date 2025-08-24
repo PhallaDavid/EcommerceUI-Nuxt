@@ -11,7 +11,7 @@
         <p class="text-gray-800 text-sm font-semibold">Category</p>
         <nuxt-link
           class="text-gray-800 text-sm font-semibold hover:underline"
-          to="/categories"
+          to="/"
           >See All</nuxt-link
         >
       </div>
