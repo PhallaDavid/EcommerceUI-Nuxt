@@ -7,7 +7,7 @@
       <div
         v-for="(banner, index) in banners"
         :key="index"
-        class="min-w-full h-44 sm:h-60 md:h-[360px] lg:h-[400px] xl:h-[480px] flex-shrink-0"
+        class="w-full h-44 sm:h-60 md:h-[360px] lg:h-[400px] xl:h-[480px] flex-shrink-0"
       >
         <img
           :src="banner"

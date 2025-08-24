@@ -1,14 +1,17 @@
 <template>
   <div class="flex flex-col justify-center items-center gap-4">
-    <h2 class="text-2xl text-gray-200 font-bold">Featured Products</h2>
-    <p class="text-gray-200">Check out our featured products below:</p>
+    <h2 class="text-2xl text-gray-800 font-bold">Featured Products</h2>
+    <p class="text-gray-800">Check out our featured products below:</p>
   </div>
-  <div class="flex flex-wrap justify-start gap-2 p-4">
+
+  <div class="flex bg-gray-100 rounded flex-wrap justify-start gap-2 p-4">
     <ProductCard
       v-for="(item, index) in products"
       :key="index"
       :product="item"
       @click="goToProductDetail(item)"
+      @cart-updated="updateCartCount"
+      @favorite-updated="updateFavoriteCount"
     />
   </div>
 </template>
@@ -22,6 +25,7 @@ export default {
   },
   data() {
     return {
+      favoriteCount: 0,
       products: [
         {
           id: 1,
@@ -68,16 +72,23 @@ export default {
           description: "Track fitness and stay connected",
           reviews: 89,
         },
-        // Add more product objects
       ],
+      cartCount: 0,
     };
   },
   methods: {
+    updateCartCount(count) {
+      this.$dispatch("cartCountUpdated", count);
+    },
     goToProductDetail(product) {
       this.$router.push({
         path: "/Product-detail",
         query: { id: product.id },
       });
+    },
+    updateFavoriteCount(count) {
+      this.favoriteCount = count;
+      console.log("Favorite count updated:", count);
     },
   },
 };

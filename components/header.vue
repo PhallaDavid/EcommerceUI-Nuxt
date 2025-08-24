@@ -1,18 +1,36 @@
 <template>
-  <header class="bg-gray-100">
+  <header class="sticky top-0 z-50 bg-gray-100">
     <nav
       aria-label="Global"
       class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
     >
-      <div class="flex lg:flex-1">
-        <nuxt-link to="/" class="-m-1.5 p-1.5">
-          <span class="sr-only">Your Company</span>
+      <div class="flex lg:flex-1 items-center gap-4">
+        <nuxt-link to="/" class="-m-1.5 p-1.5 flex items-center gap-2">
           <img
             src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-            alt=""
+            alt="Ecommerce Logo"
             class="h-8 w-auto"
           />
+          <span class="text-xl font-bold text-green-700"></span>
         </nuxt-link>
+        <!-- Product Search Input -->
+        <form
+          @submit.prevent="onSearch"
+          class="hidden lg:flex items-center ml-6"
+        >
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search products..."
+            class="px-3 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+          <button
+            type="submit"
+            class="ml-2 px-3 py-2 bg-green-700 text-white rounded-full hover:bg-green-600"
+          >
+            Search
+          </button>
+        </form>
       </div>
       <div class="flex lg:hidden">
         <button
@@ -41,25 +59,13 @@
       </div>
       <el-popover-group class="hidden lg:flex lg:gap-x-12">
         <div class="relative">
-          <button
+          <nuxt-link
+            to="/"
             popovertarget="desktop-menu-product"
             class="flex items-center gap-x-1 text-sm font-semibold text-gray-800"
           >
-            Product
-            <svg
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              data-slot="icon"
-              aria-hidden="true"
-              class="size-5 flex-none text-gray-800"
-            >
-              <path
-                d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                clip-rule="evenodd"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </button>
+            Home
+          </nuxt-link>
 
           <el-popover
             id="desktop-menu-product"
@@ -67,221 +73,24 @@
             popover
             class="w-screen max-w-md overflow-hidden rounded-3xl bg-gray-800 outline-1 -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(3)] backdrop:bg-transparent open:block data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
           >
-            <div class="p-4">
-              <div
-                class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm hover:bg-white/5"
-              >
-                <div
-                  class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-700/50 group-hover:bg-gray-700"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    data-slot="icon"
-                    aria-hidden="true"
-                    class="size-6 text-gray-400 group-hover:text-gray-800"
-                  >
-                    <path
-                      d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </div>
-                <div class="flex-auto">
-                  <a href="#" class="block font-semibold text-gray-800">
-                    Analytics
-                    <span class="absolute inset-0"></span>
-                  </a>
-                  <p class="mt-1 text-gray-400">
-                    Get a better understanding of your traffic
-                  </p>
-                </div>
-              </div>
-              <div
-                class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm hover:bg-white/5"
-              >
-                <div
-                  class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-700/50 group-hover:bg-gray-700"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    data-slot="icon"
-                    aria-hidden="true"
-                    class="size-6 text-gray-400 group-hover:text-gray-800"
-                  >
-                    <path
-                      d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672ZM12 2.25V4.5m5.834.166-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243-1.59-1.59"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </div>
-                <div class="flex-auto">
-                  <a href="#" class="block font-semibold text-gray-800">
-                    Engagement
-                    <span class="absolute inset-0"></span>
-                  </a>
-                  <p class="mt-1 text-gray-400">
-                    Speak directly to your customers
-                  </p>
-                </div>
-              </div>
-              <div
-                class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm hover:bg-white/5"
-              >
-                <div
-                  class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-700/50 group-hover:bg-gray-700"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    data-slot="icon"
-                    aria-hidden="true"
-                    class="size-6 text-gray-400 group-hover:text-gray-800"
-                  >
-                    <path
-                      d="M7.864 4.243A7.5 7.5 0 0 1 19.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 0 0 4.5 10.5a7.464 7.464 0 0 1-1.15 3.993m1.989 3.559A11.209 11.209 0 0 0 8.25 10.5a3.75 3.75 0 1 1 7.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 0 1-3.6 9.75m6.633-4.596a18.666 18.666 0 0 1-2.485 5.33"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </div>
-                <div class="flex-auto">
-                  <a href="#" class="block font-semibold text-gray-800">
-                    Security
-                    <span class="absolute inset-0"></span>
-                  </a>
-                  <p class="mt-1 text-gray-400">
-                    Your customers’ data will be safe and secure
-                  </p>
-                </div>
-              </div>
-              <div
-                class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm hover:bg-white/5"
-              >
-                <div
-                  class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-700/50 group-hover:bg-gray-700"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    data-slot="icon"
-                    aria-hidden="true"
-                    class="size-6 text-gray-400 group-hover:text-gray-800"
-                  >
-                    <path
-                      d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </div>
-                <div class="flex-auto">
-                  <a href="#" class="block font-semibold text-gray-800">
-                    Integrations
-                    <span class="absolute inset-0"></span>
-                  </a>
-                  <p class="mt-1 text-gray-400">
-                    Connect with third-party tools
-                  </p>
-                </div>
-              </div>
-              <div
-                class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm hover:bg-white/5"
-              >
-                <div
-                  class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-700/50 group-hover:bg-gray-700"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    data-slot="icon"
-                    aria-hidden="true"
-                    class="size-6 text-gray-400 group-hover:text-gray-800"
-                  >
-                    <path
-                      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </div>
-                <div class="flex-auto">
-                  <a href="#" class="block font-semibold text-gray-800">
-                    Automations
-                    <span class="absolute inset-0"></span>
-                  </a>
-                  <p class="mt-1 text-gray-400">
-                    Build strategic funnels that will convert
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div
-              class="grid grid-cols-2 divide-x divide-white/10 bg-gray-700/50"
-            >
-              <a
-                href="#"
-                class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold text-gray-800 hover:bg-gray-700/50"
-              >
-                <svg
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  data-slot="icon"
-                  aria-hidden="true"
-                  class="size-5 flex-none text-gray-800"
-                >
-                  <path
-                    d="M2 10a8 8 0 1 1 16 0 8 8 0 0 1-16 0Zm6.39-2.908a.75.75 0 0 1 .766.027l3.5 2.25a.75.75 0 0 1 0 1.262l-3.5 2.25A.75.75 0 0 1 8 12.25v-4.5a.75.75 0 0 1 .39-.658Z"
-                    clip-rule="evenodd"
-                    fill-rule="evenodd"
-                  />
-                </svg>
-                Watch demo
-              </a>
-              <a
-                href="#"
-                class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold text-gray-800 hover:bg-gray-700/50"
-              >
-                <svg
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  data-slot="icon"
-                  aria-hidden="true"
-                  class="size-5 flex-none text-gray-800"
-                >
-                  <path
-                    d="M2 3.5A1.5 1.5 0 0 1 3.5 2h1.148a1.5 1.5 0 0 1 1.465 1.175l.716 3.223a1.5 1.5 0 0 1-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 0 0 6.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 0 1 1.767-1.052l3.223.716A1.5 1.5 0 0 1 18 15.352V16.5a1.5 1.5 0 0 1-1.5 1.5H15c-1.149 0-2.263-.15-3.326-.43A13.022 13.022 0 0 1 2.43 8.326 13.019 13.019 0 0 1 2 5V3.5Z"
-                    clip-rule="evenodd"
-                    fill-rule="evenodd"
-                  />
-                </svg>
-                Contact sales
-              </a>
-            </div>
           </el-popover>
         </div>
 
-        <a href="#" class="text-sm font-semibold text-gray-800">Features</a>
-        <a href="#" class="text-sm font-semibold text-gray-800">Marketplace</a>
-        <a href="#" class="text-sm font-semibold text-gray-800">Company</a>
+        <nuxt-link
+          to="/products"
+          class="text-sm font-semibold text-gray-800 hover:text-green-700"
+          >Products</nuxt-link
+        >
+        <nuxt-link
+          to="/about"
+          class="text-sm font-semibold text-gray-800 hover:text-green-700"
+          >About Us</nuxt-link
+        >
+        <nuxt-link
+          to="/contact"
+          class="text-sm font-semibold text-gray-800 hover:text-green-700"
+          >Contact</nuxt-link
+        >
       </el-popover-group>
       <div class="hidden lg:flex lg:flex-1 gap-8 lg:justify-end">
         <nuxt-link
@@ -293,6 +102,62 @@
           to="/register"
           class="text-sm hover:text-green-300 font-semibold text-gray-800"
           >SignUp
+        </nuxt-link>
+        <button
+          @click="toggleFavorite"
+          class="relative ml-4 focus:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            :class="[
+              'h-6 w-6',
+              isFavorite ? 'text-red-500' : 'text-gray-800 hover:text-red-500',
+            ]"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 
+         5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 
+         4.5 2.09C13.09 3.81 14.76 3 
+         16.5 3 19.58 3 22 5.42 22 
+         8.5c0 3.78-3.4 6.86-8.55 
+         11.54L12 21.35z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span
+            v-if="favoriteCount > 0"
+            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5"
+          >
+            {{ favoriteCount }}
+          </span>
+        </button>
+
+        <nuxt-link to="/cart" class="relative">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-gray-800 hover:text-green-300"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.3 5.4a1 1 0 001 1.6h11.6a1 1 0 001-1.6L17 13M7 13H3m14 0a2 2 0 100 4 2 2 0 000-4zM7 17a2 2 0 100 4 2 2 0 000-4z"
+            />
+          </svg>
+
+          <!-- Cart Count Badge -->
+          <span
+            v-if="cartCount > 0"
+            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5"
+          >
+            {{ cartCount }}
+          </span>
         </nuxt-link>
       </div>
     </nav>
@@ -433,3 +298,33 @@
     </el-dialog>
   </header>
 </template>
+<script setup>
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const cartCount = ref(0);
+const favoriteCount = ref(0);
+const searchQuery = ref("");
+const isFavorite = ref(false);
+const router = useRouter();
+
+onMounted(() => {
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  cartCount.value = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+  favoriteCount.value = Array.isArray(favorites) ? favorites.length : 0;
+});
+
+function toggleFavorite() {
+  isFavorite.value = !isFavorite.value;
+}
+
+function onSearch() {
+  if (searchQuery.value.trim()) {
+    router.push({
+      path: "/products",
+      query: { search: searchQuery.value.trim() },
+    });
+  }
+}
+</script>

@@ -168,7 +168,6 @@ export default {
 </script>
 
 <style scoped>
-/* Optional: smoother mobile scroll */
 @media (max-width: 768px) {
   .w-\[280px\] {
     width: 220px !important;

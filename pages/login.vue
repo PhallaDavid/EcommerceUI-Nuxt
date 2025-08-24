@@ -1,13 +1,13 @@
 <template>
   <div class="flex justify-center items-center min-h-screen">
     <div class="w-full max-w-md">
-      <div class="flex flex-col gap-4 rounded-2xl bg-black p-8 shadow-lg">
-        <span class="text-center text-lg font-bold text-gray-200">
+      <div class="flex flex-col gap-4 rounded-lg bg-gray-200 p-8">
+        <span class="text-center text-lg font-bold text-gray-800">
           Welcome Back...!
         </span>
 
         <!-- Name Field -->
-        <label for="name" class="text-sm text-gray-200">Name</label>
+        <label for="name" class="text-sm text-gray-800">Name</label>
         <div class="relative w-full">
           <span
             class="absolute inset-y-0 left-3 flex items-center text-gray-400"
@@ -33,12 +33,12 @@
             name="name"
             id="name"
             placeholder="Enter Your Name"
-            class="w-full rounded-full bg-gray-900 py-2 pr-4 pl-10 text-gray-200 focus:ring-1 focus:ring-green-300 focus:outline-none"
+            class="w-full rounded-full bg-gray-100 py-2 pr-4 pl-10 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
           />
         </div>
 
         <!-- Password Field -->
-        <label for="Password" class="text-sm text-gray-200">Password</label>
+        <label for="Password" class="text-sm text-gray-800">Password</label>
         <div class="relative w-full">
           <span
             class="absolute inset-y-0 left-3 flex items-center text-gray-400"
@@ -64,7 +64,7 @@
             name="Password"
             id="Password"
             placeholder="Enter Your Password"
-            class="w-full rounded-full bg-gray-900 py-2 pr-10 pl-10 text-gray-200 focus:ring-1 focus:ring-green-300 focus:outline-none"
+            class="w-full rounded-full bg-gray-100 py-2 pr-10 pl-10 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
           />
           <!-- Eye Icon -->
           <span
@@ -101,7 +101,7 @@
           Login
         </button>
         <div class="text-center mt-2">
-          <span class="text-gray-200">Don't have an account?</span>
+          <span class="text-gray-800">Don't have an account?</span>
           <button
             @click="$router.push('/register')"
             class="text-green-400 hover:underline ml-1"

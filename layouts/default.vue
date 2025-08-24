@@ -1,13 +1,13 @@
 <template>
   <div class="min-h-screen bg-white flex flex-col">
-    <Header></Header>
+    <Header />
 
     <div class="flex flex-1">
-      <!-- <sidebar
+      <!-- <Sidebar
         class="hidden md:block w-64 bg-gray-50 border-r border-gray-300 p-4"
-      ></sidebar> -->
+      /> -->
       <transition name="slide">
-        <sidebar
+        <Sidebar
           v-if="sidebarOpen"
           class="fixed top-0 left-0 w-64 h-full bg-gray-50 border-r border-gray-300 p-4 z-50 md:hidden"
         />
@@ -18,6 +18,7 @@
         <slot />
       </main>
     </div>
+    <Footer />
   </div>
 </template>
 
@@ -25,6 +26,7 @@
 import { ref } from "vue";
 import Sidebar from "~/components/sidebar.vue";
 import Header from "~/components/header.vue";
+import Footer from "~/components/footer.vue";
 
 const sidebarOpen = ref(false);
 </script>

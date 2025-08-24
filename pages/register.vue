@@ -1,12 +1,11 @@
 <template>
   <div class="min-h-screen flex items-center justify-center">
-    <div class="w-full max-w-md bg-black rounded-2xl shadow-lg p-8">
+    <div class="w-full max-w-md bg-gray-200 rounded-lg p-8">
       <!-- Header -->
       <div class="text-center mb-6">
-        <h2 class="text-lg font-bold text-gray-200">Create Account Now</h2>
-        <p class="text-xs text-gray-200">Create An Account Now start</p>
-        <hr class="my-2 border-gray-600" />
-        <p class="text-xs text-gray-200">Manage Payment</p>
+        <h2 class="text-lg font-bold text-gray-800">Create Account Now</h2>
+        <p class="text-xs text-gray-800">Create An Account Now start</p>
+        <p class="text-xs text-gray-800">Manage Payment</p>
       </div>
 
       <!-- Form Fields -->
@@ -15,14 +14,14 @@
         <input
           type="text"
           placeholder="Email"
-          class="w-full rounded-full bg-gray-900 py-2 pl-5 pr-4 text-gray-200 focus:ring-1 focus:ring-green-300 focus:outline-none"
+          class="w-full rounded-full bg-gray-100 py-2 pl-5 pr-4 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
         />
 
         <!-- Name -->
         <input
           type="text"
           placeholder="Name"
-          class="w-full rounded-full bg-gray-900 py-2 pl-5 pr-4 text-gray-200 focus:ring-1 focus:ring-green-300 focus:outline-none"
+          class="w-full rounded-full bg-gray-100 py-2 pl-5 pr-4 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
         />
 
         <!-- Password -->
@@ -30,7 +29,7 @@
           <input
             type="password"
             placeholder="Password"
-            class="w-full rounded-full bg-gray-900 py-2 pl-5 pr-10 text-gray-200 focus:ring-1 focus:ring-green-300 focus:outline-none"
+            class="w-full rounded-full bg-gray-100 py-2 pl-5 pr-10 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
           />
           <!-- Eye Icon -->
           <span
@@ -46,7 +45,7 @@
           <input
             type="password"
             placeholder="Confirm Password"
-            class="w-full rounded-full bg-gray-900 py-2 pl-5 pr-10 text-gray-200 focus:ring-1 focus:ring-green-300 focus:outline-none"
+            class="w-full rounded-full bg-gray-100 py-2 pl-5 pr-10 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
           />
           <!-- Eye Icon -->
           <span
@@ -66,8 +65,11 @@
 
         <!-- Sign In Link -->
         <div class="text-center mt-2">
-          <span class=" text-gray-200">Already have an account?</span>
-          <button @click="$router.push('/login')" class=" text-green-400 hover:underline ml-1">
+          <span class="text-gray-800">Already have an account?</span>
+          <button
+            @click="$router.push('/login')"
+            class="text-green-400 hover:underline ml-1"
+          >
             Sign In
           </button>
         </div>

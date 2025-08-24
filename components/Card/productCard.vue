@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center p-4">
     <div
-      class="flex w-50 h-auto flex-col gap-2 rounded-lg border-1 border-gray-200 bg-gray-100 p-2 shadow-lg"
+      class="flex w-50 h-auto flex-col gap-2 rounded-lg border border-gray-200 bg-gray-100 p-2 shadow-lg"
     >
       <!-- Image container -->
       <div class="relative">
@@ -11,18 +11,28 @@
           :alt="product.name"
         />
         <!-- Favorite Heart -->
-        <span class="absolute top-2 right-2 cursor-pointer">
+        <span
+          class="absolute top-2 right-2 cursor-pointer"
+          @click="toggleFavorite"
+          :title="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
-            class="h-8 w-8"
+            :class="[
+              'h-8 w-8 transition-colors duration-300',
+              isFavorite
+                ? 'fill-red-500 stroke-red-600'
+                : 'fill-transparent stroke-green-700 hover:fill-red-500 hover:stroke-red-600',
+            ]"
+            stroke="currentColor"
+            stroke-width="2"
           >
             <path
-              fill="#065f46"
               d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
-               2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09
-               C13.09 3.81 14.76 3 16.5 3
-               19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09
+                 C13.09 3.81 14.76 3 16.5 3
+                 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
             />
           </svg>
         </span>
@@ -58,24 +68,74 @@
 
       <!-- Add to Cart -->
       <button
-        class="mt-2 ml-2 self-start rounded-full bg-green-800 px-4 py-2 font-semibold text-gray-200"
+        class="mt-2 ml-2 self-start rounded-full bg-green-800 p-2 font-semibold text-gray-200 hover:bg-green-700 transition"
+        @click="addToCart"
+        aria-label="Add to Cart"
       >
-        Add to Cart
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.3 5.4a1 1 0 001 1.6h11.6a1 1 0 001-1.6L17 13M7 13H3m14 0a2 2 0 100 4 2 2 0 000-4zM7 17a2 2 0 100 4 2 2 0 000-4z"
+          />
+        </svg>
       </button>
     </div>
   </div>
 </template>
 
 <script>
-import loading from "../loading.vue";
 export default {
-  components: {
-    loading,
-  },
   props: {
     product: {
       type: Object,
       required: true,
+    },
+  },
+  data() {
+    return {
+      isFavorite: false,
+    };
+  },
+  mounted() {
+    const favs = JSON.parse(localStorage.getItem("favorites") || "[]");
+    this.isFavorite = favs.includes(this.product.id);
+  },
+  methods: {
+    toggleFavorite() {
+      let favs = JSON.parse(localStorage.getItem("favorites") || "[]");
+      if (this.isFavorite) {
+        favs = favs.filter((id) => id !== this.product.id);
+      } else {
+        favs.push(this.product.id);
+      }
+      localStorage.setItem("favorites", JSON.stringify(favs));
+      this.isFavorite = !this.isFavorite;
+    },
+    addToCart() {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const existing = cart.find((item) => item.id === this.product.id);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ ...this.product, quantity: 1 });
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      this.$emit(
+        "cart-updated",
+        cart.reduce((sum, item) => sum + item.quantity, 0)
+      );
+
+      alert(`${this.product.name} added to cart`);
     },
   },
 };
