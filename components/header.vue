@@ -299,6 +299,7 @@
   </header>
 </template>
 <script setup>
+import axios from "axios";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
@@ -306,11 +307,13 @@ const cartCount = ref(0);
 const favoriteCount = ref(0);
 const searchQuery = ref("");
 const isFavorite = ref(false);
+const products = ref([]);
 const router = useRouter();
 
 onMounted(() => {
   const cart = JSON.parse(localStorage.getItem("cart") || "[]");
   cartCount.value = cart.reduce((sum, item) => sum + item.quantity, 0);
+
   const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
   favoriteCount.value = Array.isArray(favorites) ? favorites.length : 0;
 });
@@ -319,12 +322,24 @@ function toggleFavorite() {
   isFavorite.value = !isFavorite.value;
 }
 
-function onSearch() {
-  if (searchQuery.value.trim()) {
-    router.push({
-      path: "/products",
-      query: { search: searchQuery.value.trim() },
+async function onSearch() {
+  const query = searchQuery.value.trim();
+  if (!query) return;
+
+  try {
+    const { data } = await axios.get("http://127.0.0.1:8000/api/products/search", {
+      params: { name: query },
     });
+    products.value = data;
+
+    // Navigate to /Search page and pass query or results via router state
+    router.push({ 
+      path: "/Search", 
+      query: { q: query } 
+    });
+  } catch (error) {
+    console.error(error);
   }
 }
 </script>
+
