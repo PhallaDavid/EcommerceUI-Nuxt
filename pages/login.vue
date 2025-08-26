@@ -6,8 +6,8 @@
           Welcome Back...!
         </span>
 
-        <!-- Name Field -->
-        <label for="name" class="text-sm text-gray-800">Name</label>
+        <!-- email Field -->
+        <label for="email" class="text-sm text-gray-800">email</label>
         <div class="relative w-full">
           <span
             class="absolute inset-y-0 left-3 flex items-center text-gray-400"
@@ -29,16 +29,16 @@
             </svg>
           </span>
           <input
+            v-model="email"
             type="text"
-            name="name"
-            id="name"
-            placeholder="Enter Your Name"
+            id="email"
+            placeholder="Enter Your email"
             class="w-full rounded-full bg-gray-100 py-2 pr-4 pl-10 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
           />
         </div>
 
         <!-- Password Field -->
-        <label for="Password" class="text-sm text-gray-800">Password</label>
+        <label for="password" class="text-sm text-gray-800">Password</label>
         <div class="relative w-full">
           <span
             class="absolute inset-y-0 left-3 flex items-center text-gray-400"
@@ -60,19 +60,19 @@
             </svg>
           </span>
           <input
-            type="password"
-            name="Password"
-            id="Password"
+            v-model="password"
+            :type="showPassword ? 'text' : 'password'"
+            id="password"
             placeholder="Enter Your Password"
             class="w-full rounded-full bg-gray-100 py-2 pr-10 pl-10 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
           />
-          <!-- Eye Icon -->
           <span
-            onclick="togglePassword()"
+            @click="togglePassword"
             class="absolute inset-y-0 right-3 flex cursor-pointer items-center text-gray-400"
           >
+            <!-- Eye Icon -->
             <svg
-              id="eyeIcon"
+              v-if="!showPassword"
               xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5"
               fill="none"
@@ -87,6 +87,21 @@
               />
               <circle cx="12" cy="12" r="3" />
             </svg>
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M3 3l18 18M10.477 10.477A3 3 0 0112 9a3 3 0 013 3c0 .795-.309 1.515-.81 2.045M9.879 9.88A3 3 0 009 12c0 .795.309 1.515.81 2.045m2.045 2.045A8.25 8.25 0 012.25 12a8.25 8.25 0 0111.877-7.207"
+              />
+            </svg>
           </span>
         </div>
 
@@ -95,11 +110,12 @@
         </span>
 
         <button
-          @click="$router.push('/otp')"
+          @click="login"
           class="w-full rounded-full bg-green-400 px-4 py-2 font-semibold text-gray-900 hover:bg-green-500"
         >
           Login
         </button>
+
         <div class="text-center mt-2">
           <span class="text-gray-800">Don't have an account?</span>
           <button
@@ -113,3 +129,50 @@
     </div>
   </div>
 </template>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      email: "",
+      password: "",
+      showPassword: false,
+    };
+  },
+  methods: {
+    togglePassword() {
+      this.showPassword = !this.showPassword;
+    },
+    async login() {
+      try {
+        const response = await axios.post("http://localhost:8000/api/login", {
+          email: this.email,
+          password: this.password,
+        });
+
+        this.$emit("show-global-message", {
+          type: "success",
+          text: "Login successful!",
+        });
+
+        localStorage.setItem("token", response.data.token);
+        // redirect or do something
+      } catch (error) {
+        let errorMessage = "Login failed. Please try again.";
+
+        if (error.response && error.response.status === 422) {
+          errorMessage =
+            error.response.data.errors.email?.[0] || "Invalid data.";
+        }
+
+        this.$emit("show-global-message", {
+          type: "error",
+          text: errorMessage,
+        });
+      }
+    },
+  },
+};
+</script>

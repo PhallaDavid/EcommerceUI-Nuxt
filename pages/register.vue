@@ -12,13 +12,17 @@
       <div class="flex flex-col gap-4">
         <!-- Email -->
         <input
+          v-model="email"
           type="text"
+          id="email"
           placeholder="Email"
           class="w-full rounded-full bg-gray-100 py-2 pl-5 pr-4 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
         />
 
         <!-- Name -->
         <input
+          v-model="name"
+          id="name"
           type="text"
           placeholder="Name"
           class="w-full rounded-full bg-gray-100 py-2 pl-5 pr-4 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
@@ -27,6 +31,8 @@
         <!-- Password -->
         <div class="relative w-full">
           <input
+            v-model="password"
+            id="password"
             type="password"
             placeholder="Password"
             class="w-full rounded-full bg-gray-100 py-2 pl-5 pr-10 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
@@ -43,6 +49,8 @@
         <!-- Confirm Password -->
         <div class="relative w-full">
           <input
+            v-model="password_confirmation"
+            id="password_confirmation"
             type="password"
             placeholder="Confirm Password"
             class="w-full rounded-full bg-gray-100 py-2 pl-5 pr-10 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
@@ -58,6 +66,7 @@
 
         <!-- Sign Up Button -->
         <button
+          @click="register"
           class="w-full rounded-full bg-green-400 px-4 py-2 font-semibold text-gray-900 hover:bg-green-500 transition"
         >
           SignUp
@@ -77,3 +86,41 @@
     </div>
   </div>
 </template>
+<script>
+import axios from "axios";
+export default{
+  data(){
+    return{
+      email:"",
+      name:"",
+      password:"",
+      password_confirmation:"",
+      errorMessage:"",
+    }
+  },
+  methods: {
+    async register() {
+      this.errorMessage = "";
+      try {
+        const response = await axios.post("http://localhost:8000/api/register", {
+          email: this.email,
+          name: this.name,
+          password: this.password,
+          password_confirmation: this.password_confirmation,
+        });
+        console.log("Registration success:", response.data);
+        localStorage.setItem("token", response.data.token);
+      } catch (error) {
+        if (error.response && error.response.status === 422) {
+          this.errorMessage = error.response.data.errors.email
+            ? error.response.data.errors.email[0]
+            : "Invalid data.";
+        } else {
+          this.errorMessage = "Registration failed. Please try again.";
+        }
+        console.error("Registration failed:", error.response.data);
+      }
+    },
+  },
+}
+</script>
