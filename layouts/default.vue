@@ -1,17 +1,15 @@
 <template>
   <div class="min-h-screen bg-white flex flex-col">
-    <Header />
+    <Header @toggle-sidebar="sidebarOpen = !sidebarOpen" />
 
     <div class="flex flex-1">
-      <!-- Sidebar controlled by sidebarOpen -->
       <transition name="slide">
         <Sidebar
           v-if="sidebarOpen"
           class="fixed top-0 left-0 w-64 h-full bg-gray-50 border-r border-gray-300 p-4 z-40 md:static md:block md:w-64"
         />
       </transition>
-
-      <main class="flex-1 max-w-7xl mx-auto justify-center items-center bg-white p-6">
+      <main class="flex-1 max-w-7xl mx-auto flex flex-col justify-center items-center p-6">
         <slot />
       </main>
     </div>

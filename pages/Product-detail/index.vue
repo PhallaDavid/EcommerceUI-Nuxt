@@ -101,6 +101,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -113,39 +115,9 @@ export default {
         "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1170",
         "https://images.unsplash.com/photo-1585386959984-a4155224c4c6?q=80&w=1170",
         "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1170",
-        // Add more if you want
       ],
       mainImage: "",
       product: null,
-      products: [
-        {
-          id: 1,
-          name: "Headphones",
-          price: 599.0,
-          image:
-            "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1170&auto=format",
-          description: "A perfect balance of high-fidelity audio",
-          reviews: 121,
-        },
-        {
-          id: 2,
-          name: "Smart Watch",
-          price: 299.0,
-          image:
-            "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1170",
-          description: "Track fitness and stay connected",
-          reviews: 89,
-        },
-        {
-          id: 3,
-          name: "Wireless Speaker",
-          price: 199.0,
-          image:
-            "https://images.unsplash.com/photo-1585386959984-a4155224c4c6?q=80&w=1170",
-          description: "Portable sound with rich bass",
-          reviews: 67,
-        },
-      ],
       startIndex: 0,
       visibleCount: 6,
     };
@@ -158,16 +130,23 @@ export default {
       );
     },
   },
-  mounted() {
-    const id = parseInt(this.$route.query.id);
-    this.product = this.products.find((item) => item.id === id);
-
-    if (this.product) {
-      this.mainImage =
-        this.images.length > 0 ? this.images[0] : this.product.image;
+  async created() {
+    const id = this.$route.query.id;
+    if (id) {
+      await this.fetchProductDetail(id);
+      // set main image after product is fetched
+      this.mainImage = this.images.length > 0 ? this.images[0] : this.product?.image;
     }
   },
   methods: {
+    async fetchProductDetail(id) {
+      try {
+        const res = await axios.get(`http://127.0.0.1:8000/api/products/${id}`);
+        this.product = res.data;
+      } catch (error) {
+        console.error("Error fetching product detail:", error);
+      }
+    },
     nextSlide() {
       if (this.startIndex + this.visibleCount < this.images.length) {
         this.startIndex++;
@@ -178,6 +157,10 @@ export default {
         this.startIndex--;
       }
     },
+    selectThumbnail(image) {
+      this.mainImage = image;
+    },
   },
 };
 </script>
+

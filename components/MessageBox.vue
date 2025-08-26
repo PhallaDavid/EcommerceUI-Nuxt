@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="visible"
+    v-if="visibleLocal"
     class="fixed bottom-4 right-4 z-50 bg-white shadow-lg rounded-lg p-4 max-w-xs w-full"
   >
     <p class="text-gray-800">{{ message }}</p>
@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref, watch, defineProps, defineEmits } from "vue";
+import { ref, watch } from "vue";
 
 const props = defineProps({
   message: {
@@ -28,15 +28,16 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:visible"]);
-
-const visible = ref(props.visible);
-
-watch(() => props.visible, (val) => {
-  visible.value = val;
-});
+const visibleLocal = ref(props.visible);
+watch(
+  () => props.visible,
+  (val) => {
+    visibleLocal.value = val;
+  }
+);
 
 function close() {
-  visible.value = false;
+  visibleLocal.value = false;
   emit("update:visible", false);
 }
 </script>

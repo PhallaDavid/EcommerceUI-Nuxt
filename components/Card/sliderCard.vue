@@ -31,12 +31,15 @@
             class="flex flex-col rounded-lg p-4 text-center font-semibold cursor-pointer"
           >
             <img
-              :src="category.image"
+              :src="category.images"
               alt="Category Image"
               class="w-40 h-40 mx-auto object-cover mb-4 rounded-full"
             />
             <p class="text-gray-800 text-sm font-semibold">
               {{ category.name }}
+            </p>
+             <p class="text-gray-800 text-sm font-semibold">
+              {{ category.description }}
             </p>
           </div>
         </div>
@@ -90,6 +93,7 @@
 <script>
 import AOS from "aos";
 import "aos/dist/aos.css";
+import axios from "axios";
 
 export default {
   data() {
@@ -97,46 +101,6 @@ export default {
       currentIndex: 0,
       cardWidth: 280,
       categories: [
-        {
-          name: "Electronics",
-          image:
-            "https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_800,w_800/shoes_women_tcc_d_234be42564.jpg",
-        },
-        {
-          name: "Clothing",
-          image:
-            "https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_800,w_800/shoes_women_tcc_d_234be42564.jpg",
-        },
-        {
-          name: "Home & Garden",
-          image:
-            "https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_800,w_800/shoes_women_tcc_d_234be42564.jpg",
-        },
-        {
-          name: "Sports",
-          image:
-            "https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_800,w_800/shoes_women_tcc_d_234be42564.jpg",
-        },
-        {
-          name: "Toys",
-          image:
-            "https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_800,w_800/shoes_women_tcc_d_234be42564.jpg",
-        },
-        {
-          name: "Books",
-          image:
-            "https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_800,w_800/shoes_women_tcc_d_234be42564.jpg",
-        },
-        {
-          name: "Beauty",
-          image:
-            "https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_800,w_800/shoes_women_tcc_d_234be42564.jpg",
-        },
-        {
-          name: "Automotive",
-          image:
-            "https://brand.assets.adidas.com/image/upload/f_auto,q_auto:best,fl_lossy/if_w_gt_800,w_800/shoes_women_tcc_d_234be42564.jpg",
-        },
       ],
     };
   },
@@ -148,7 +112,18 @@ export default {
       return Math.max(this.categories.length - visibleCards, 0);
     },
   },
+    created() {
+    this.fetchCategories();
+  },
   methods: {
+ async fetchCategories() {
+      try {
+        const res = await axios.get("http://127.0.0.1:8000/api/categories");
+        this.categories = res.data;
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    },
     nextSlide() {
       if (this.currentIndex < this.maxIndex) this.currentIndex++;
     },

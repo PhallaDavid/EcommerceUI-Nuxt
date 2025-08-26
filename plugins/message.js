@@ -1,4 +1,3 @@
-// plugins/message.js
 import mitt from 'mitt'
 
 const emitter = mitt()

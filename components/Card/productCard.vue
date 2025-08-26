@@ -7,7 +7,7 @@
       <div class="relative">
         <img
           class="h-30 w-full rounded-lg object-cover"
-          :src="product.image"
+          :src="product.images"
           :alt="product.name"
         />
         <!-- Favorite Heart -->
@@ -63,7 +63,7 @@
             fill="#065f46"
           />
         </svg>
-        <span class="text-xs text-gray-600">({{ product.reviews }})</span>
+        <span class="text-xs text-gray-600">({{ product.rating }})</span>
       </div>
 
       <!-- Add to Cart -->
