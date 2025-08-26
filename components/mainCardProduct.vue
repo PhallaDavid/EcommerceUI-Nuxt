@@ -9,7 +9,7 @@
       v-for="(item, index) in products"
       :key="index"
       :product="item"
-      @click="goToProductDetail(item)"
+      @card-click="goToProductDetail(item)"
       @cart-updated="updateCartCount"
       @favorite-updated="updateFavoriteCount"
     />
@@ -45,12 +45,13 @@ export default {
     },
     updateCartCount(count) {
       this.$dispatch("cartCountUpdated", count);
-    },goToProductDetail(product) {
-  this.$router.push({
-    path: "/Product-detail",
-    query: { id: product.id },
-  });
-},
+    },
+    goToProductDetail(product) {
+      this.$router.push({
+        path: "/Product-detail",
+        query: { id: product.id },
+      });
+    },
 
     updateFavoriteCount(count) {
       this.favoriteCount = count;

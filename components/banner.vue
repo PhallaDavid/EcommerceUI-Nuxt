@@ -5,14 +5,15 @@
       :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
     >
       <div
-        v-for="(banner, index) in banners"
-        :key="index"
+        v-for="(banner, index) in bannersWithImages"
+        :key="banner.id"
         class="w-full h-44 sm:h-60 md:h-[360px] lg:h-[400px] xl:h-[480px] flex-shrink-0"
       >
         <img
-          :src="banner"
-          alt="Banner"
+          :src="getBannerImageUrl(banner.images[0])"
+          :alt="banner.title || 'Banner Image'"
           class="w-full h-full object-cover rounded-lg"
+          @error="onImageError($event)"
         />
       </div>
     </div>
@@ -21,6 +22,8 @@
     <button
       @click="prevBanner"
       class="absolute top-1/2 left-4 -translate-y-1/2 p-2 text-white bg-gray-800 rounded-full hover:bg-gray-700 z-10"
+      :disabled="bannersWithImages.length === 0"
+      aria-label="Previous banner"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -29,12 +32,7 @@
         viewBox="0 0 24 24"
         stroke="currentColor"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 19l-7-7 7-7"
-        />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
       </svg>
     </button>
 
@@ -42,6 +40,8 @@
     <button
       @click="nextBanner"
       class="absolute top-1/2 right-4 -translate-y-1/2 p-2 text-white bg-gray-800 rounded-full hover:bg-gray-700 z-10"
+      :disabled="bannersWithImages.length === 0"
+      aria-label="Next banner"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -50,36 +50,71 @@
         viewBox="0 0 24 24"
         stroke="currentColor"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M9 5l7 7-7 7"
-        />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
       </svg>
     </button>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       currentIndex: 0,
-      banners: [
-        "https://mir-s3-cdn-cf.behance.net/project_modules/fs/2bbcfa99737217.5ef9be3dbb9a9.jpg",
-        "https://images.unsplash.com/photo-1491553895911-0055eca6402d",
-        "https://eegoitaly.in/cdn/shop/collections/Sports_Shoes_Banner.png?v=1690211860&width=1600",
-      ],
+      banners: [],
+      fallbackImage: "https://via.placeholder.com/800x400?text=No+Image",
+      interval: null,
     };
   },
+  computed: {
+    bannersWithImages() {
+      return this.banners.filter((banner) => banner.images && banner.images.length > 0);
+    },
+  },
+  created() {
+    this.fetchBanner();
+  },
+  mounted() {
+    this.interval = setInterval(() => {
+      this.nextBanner();
+    }, 5000);
+  },
+  beforeUnmount() {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+  },
   methods: {
+    async fetchBanner() {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/banners");
+        this.banners = response.data;
+        if (this.bannersWithImages.length === 0) {
+          console.warn("No banners with images found");
+        }
+      } catch (error) {
+        console.error("Error fetching banners:", error);
+      }
+    },
+    getBannerImageUrl(imagePath) {
+      if (!imagePath) return this.fallbackImage;
+      // Ensure URL starts with http(s) or is relative path
+      if (imagePath.startsWith("http")) return imagePath;
+      return `http://127.0.0.1:8000${imagePath}`;
+    },
     nextBanner() {
-      this.currentIndex = (this.currentIndex + 1) % this.banners.length;
+      if (this.bannersWithImages.length === 0) return;
+      this.currentIndex = (this.currentIndex + 1) % this.bannersWithImages.length;
     },
     prevBanner() {
+      if (this.bannersWithImages.length === 0) return;
       this.currentIndex =
-        (this.currentIndex - 1 + this.banners.length) % this.banners.length;
+        (this.currentIndex - 1 + this.bannersWithImages.length) % this.bannersWithImages.length;
+    },
+    onImageError(event) {
+      event.target.src = this.fallbackImage;
     },
   },
 };
