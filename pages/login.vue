@@ -1,16 +1,16 @@
 <template>
   <div class="flex justify-center items-center min-h-screen">
     <div class="w-full max-w-md">
-      <div class="flex flex-col gap-4 rounded-lg bg-gray-200 p-8">
-        <span class="text-center text-lg font-bold text-gray-800">
+      <div class="flex flex-col gap-4 rounded-xl bg-gray-200 shadow-xl p-12">
+        <span class="text-center text-lg font-bold text-blue-500">
           Welcome Back...!
         </span>
 
         <!-- Email Field -->
-        <label for="email" class="text-sm text-gray-800">Email</label>
+        <label for="email" class="text-sm text-gray-700">Email</label>
         <div class="relative w-full">
           <span
-            class="absolute inset-y-0 left-3 flex items-center text-gray-400"
+            class="absolute inset-y-0 left-3 flex items-center text-blue-500"
           >
             <!-- User Icon -->
             <svg
@@ -33,15 +33,15 @@
             type="text"
             id="email"
             placeholder="Enter Your Email"
-            class="w-full rounded-full bg-gray-100 py-2 pr-4 pl-10 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
+            class="w-full rounded-full bg-indigo-50 py-2 pr-4 pl-10 text-gray-800 focus:ring-2 focus:text-blue-500 focus:outline-none"
           />
         </div>
 
         <!-- Password Field -->
-        <label for="password" class="text-sm text-gray-800">Password</label>
+        <label for="password" class="text-sm text-gray-700">Password</label>
         <div class="relative w-full">
           <span
-            class="absolute inset-y-0 left-3 flex items-center text-gray-400"
+            class="absolute inset-y-0 left-3 flex items-center text-blue-500"
           >
             <!-- Lock Icon -->
             <svg
@@ -64,11 +64,11 @@
             :type="showPassword ? 'text' : 'password'"
             id="password"
             placeholder="Enter Your Password"
-            class="w-full rounded-full bg-gray-100 py-2 pr-10 pl-10 text-gray-800 focus:ring-1 focus:ring-green-300 focus:outline-none"
+            class="w-full rounded-full bg-indigo-50 py-2 pr-10 pl-10 text-gray-800 focus:ring-2 focus:text-blue-500 focus:outline-none"
           />
           <span
             @click="togglePassword"
-            class="absolute inset-y-0 right-3 flex cursor-pointer items-center text-gray-400"
+            class="absolute inset-y-0 right-3 flex cursor-pointer items-center text-blue-500"
           >
             <!-- Eye Icon -->
             <svg
@@ -105,23 +105,24 @@
           </span>
         </div>
 
-        <span class="cursor-pointer self-end text-green-300 hover:underline">
+        <span class="cursor-pointer self-end text-blue-500 hover:underline">
           Forget password?
         </span>
+
         <button
           @click="login"
           :disabled="loading"
-          class="w-full rounded-full bg-green-400 px-4 py-2 font-semibold text-gray-900 hover:bg-green-500 flex justify-center items-center gap-2"
+          class="w-full rounded-full bg-blue-500 px-4 py-2 font-semibold text-white flex justify-center items-center gap-2"
         >
-          <span v-if="!loading">Login</span>
-          <span v-else> <Spinner v-if="loading" /></span>
+          <span v-if="!loading">Sign In</span>
+          <Spinner v-else />
         </button>
 
-        <div class="text-center mt-2">
-          <span class="text-gray-800">Don't have an account?</span>
+        <div class="text-center mt-2 text-gray-700">
+          <span>Don't have an account?</span>
           <button
             @click="$router.push('/register')"
-            class="text-green-400 hover:underline ml-1"
+            class="text-blue-500 hover:underline ml-1"
           >
             Sign Up
           </button>
@@ -134,6 +135,7 @@
 <script>
 import axios from "axios";
 import Spinner from "~/components/Spinner.vue";
+import { triggerToast } from "~/stores/toastStore";
 
 export default {
   components: { Spinner },
@@ -152,30 +154,23 @@ export default {
     async login() {
       this.loading = true;
       try {
-        const response = await axios.post("http://localhost:8000/api/login", {
+        const res = await axios.post("http://localhost:8000/api/login", {
           email: this.email,
           password: this.password,
         });
 
-        this.$emit("show-global-message", {
-          type: "success",
-          text: "Login successful!",
-        });
-        localStorage.setItem("token", response.data.token);
+        triggerToast("Login successful! Redirecting...", "success");
+
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("email", this.email);
 
         this.$router.push("/otp");
-      } catch (error) {
-        let errorMessage = "Login failed. Please try again.";
-        if (error.response && error.response.status === 422) {
-          errorMessage =
-            error.response.data.errors.email?.[0] || "Invalid data.";
-        }
-
-        this.$emit("show-global-message", {
-          type: "error",
-          text: errorMessage,
-        });
+      } catch (err) {
+        let msg = "Login failed. Please try again.";
+        if (err.response?.status === 422)
+          msg = err.response.data.errors.email?.[0] || msg;
+        triggerToast(msg, "error");
       } finally {
         this.loading = false;
       }

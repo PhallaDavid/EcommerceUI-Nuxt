@@ -1,6 +1,16 @@
 
 import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
+   app: {
+    head: {
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'
+        }
+      ]
+    }
+  },
     modules: [
     '@pinia/nuxt',
   ],

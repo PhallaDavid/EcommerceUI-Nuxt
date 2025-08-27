@@ -17,8 +17,6 @@
         />
       </div>
     </div>
-
-    <!-- Prev Button -->
     <button
       @click="prevBanner"
       class="absolute top-1/2 left-4 -translate-y-1/2 p-2 text-white bg-gray-800 rounded-full hover:bg-gray-700 z-10"
@@ -32,7 +30,12 @@
         viewBox="0 0 24 24"
         stroke="currentColor"
       >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 19l-7-7 7-7"
+        />
       </svg>
     </button>
 
@@ -50,7 +53,12 @@
         viewBox="0 0 24 24"
         stroke="currentColor"
       >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5l7 7-7 7"
+        />
       </svg>
     </button>
   </div>
@@ -70,7 +78,9 @@ export default {
   },
   computed: {
     bannersWithImages() {
-      return this.banners.filter((banner) => banner.images && banner.images.length > 0);
+      return this.banners.filter(
+        (banner) => banner.images && banner.images.length > 0
+      );
     },
   },
   created() {
@@ -100,18 +110,19 @@ export default {
     },
     getBannerImageUrl(imagePath) {
       if (!imagePath) return this.fallbackImage;
-      // Ensure URL starts with http(s) or is relative path
       if (imagePath.startsWith("http")) return imagePath;
       return `http://127.0.0.1:8000${imagePath}`;
     },
     nextBanner() {
       if (this.bannersWithImages.length === 0) return;
-      this.currentIndex = (this.currentIndex + 1) % this.bannersWithImages.length;
+      this.currentIndex =
+        (this.currentIndex + 1) % this.bannersWithImages.length;
     },
     prevBanner() {
       if (this.bannersWithImages.length === 0) return;
       this.currentIndex =
-        (this.currentIndex - 1 + this.bannersWithImages.length) % this.bannersWithImages.length;
+        (this.currentIndex - 1 + this.bannersWithImages.length) %
+        this.bannersWithImages.length;
     },
     onImageError(event) {
       event.target.src = this.fallbackImage;

@@ -1,10 +1,11 @@
 <template>
   <div class="flex justify-center items-center min-h-screen">
-    <div class="w-96 bg-black p-8 rounded-xl shadow-lg">
-      <h2 class="text-center text-white text-xl mb-2">OTP Verification</h2>
-      <p class="text-center text-gray-400 text-sm mb-4">
+    <div class="w-96 bg-gray-200 p-12 rounded-xl shadow-xl">
+      <!-- Header -->
+      <h2 class="text-center text-blue-500 text-xl font-bold mb-2">OTP Verification</h2>
+      <p class="text-center text-gray-700 text-sm mb-6">
         6-digit code has been sent to <br />
-        <span class="text-green-400 font-semibold">{{ email }}</span>
+        <span class="text-blue-500 font-semibold">{{ email }}</span>
       </p>
 
       <!-- OTP Inputs -->
@@ -15,7 +16,8 @@
           type="text"
           maxlength="1"
           v-model="otp[index]"
-          class="w-10 h-12 text-center text-lg rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-green-400"
+          :disabled="loadingVerify"
+          class="w-12 h-12 text-center text-lg rounded-full bg-indigo-50 text-gray-800 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none transition-all duration-300"
           @input="moveToNext(index)"
           @keydown.backspace="handleBackspace(index, $event)"
           @paste="handlePaste"
@@ -24,37 +26,44 @@
       </div>
 
       <!-- Verify Button -->
-      <button
-        class="w-full py-2 mb-3 bg-green-400 text-black rounded-full font-semibold"
+      <button 
+        class="w-full py-2 mb-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full font-semibold hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 flex justify-center items-center gap-2"
         @click="verifyOtp"
+        :disabled="loadingVerify || loadingResend"
       >
-        Verify OTP
+        <span v-if="!loadingVerify">Verify</span>
+        <Spinner v-else />
       </button>
 
       <!-- Resend OTP Button -->
       <button
-        class="w-full py-2 bg-gray-600 text-white rounded-full font-semibold"
+        class="w-full py-2 bg-gray-200 text-blue-500 rounded-full font-semibold hover:bg-gray-300 transition-all duration-300 flex justify-center items-center gap-2"
         @click="resendOtp"
-        :disabled="countdown > 0"
+        :disabled="countdown > 0 || loadingResend || loadingVerify"
       >
-        <span v-if="countdown === 0">Resend OTP</span>
-        <span v-else>Resend in {{ countdown }}s</span>
+        <span v-if="!loadingResend">
+          <span v-if="countdown === 0">Resend OTP</span>
+          <span v-else>Resend in {{ countdown }}s</span>
+        </span>
+        <Spinner v-else />
       </button>
     </div>
   </div>
 </template>
 
 <script>
-definePageMeta({
-  middleware: "guest",
-});
+import Spinner from '~/components/Spinner.vue';
+
 export default {
+  components: { Spinner },
   data() {
     return {
       otp: Array(6).fill(""),
       email: "",
       countdown: 0,
       countdownTimer: null,
+      loadingVerify: false,
+      loadingResend: false,
     };
   },
   mounted() {
@@ -67,9 +76,7 @@ export default {
     });
   },
   beforeUnmount() {
-    if (this.countdownTimer) {
-      clearInterval(this.countdownTimer);
-    }
+    if (this.countdownTimer) clearInterval(this.countdownTimer);
   },
   methods: {
     startCountdown() {
@@ -85,13 +92,12 @@ export default {
 
     async sendOtp() {
       if (!this.email) return;
+      this.loadingResend = true;
 
       try {
         const response = await fetch("http://localhost:8000/api/send-otp", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: this.email }),
         });
 
@@ -100,6 +106,8 @@ export default {
         this.startCountdown();
       } catch (error) {
         console.error("Error sending OTP:", error);
+      } finally {
+        this.loadingResend = false;
       }
     },
 
@@ -110,18 +118,14 @@ export default {
     },
 
     async verifyOtp() {
+      this.loadingVerify = true;
       const code = this.otp.join("");
 
       try {
         const response = await fetch("http://localhost:8000/api/verify-otp", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: this.email,
-            otp: code,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: this.email, otp: code }),
         });
 
         const result = await response.json();
@@ -134,6 +138,8 @@ export default {
       } catch (error) {
         console.error("OTP verify error", error);
         alert("An error occurred during verification. Please try again.");
+      } finally {
+        this.loadingVerify = false;
       }
     },
 
@@ -146,11 +152,8 @@ export default {
     handleBackspace(index, event) {
       if (event.key === "Backspace") {
         if (this.otp[index] === "") {
-          if (index === 0) {
-            this.otp = Array(6).fill("");
-          } else {
-            this.$refs.otpInputs[index - 1].focus();
-          }
+          if (index === 0) this.otp = Array(6).fill("");
+          else this.$refs.otpInputs[index - 1].focus();
         }
       }
     },

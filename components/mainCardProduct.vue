@@ -1,34 +1,43 @@
 <template>
-  <div class="flex flex-col justify-center items-center gap-4">
-    <h2 class="text-2xl text-gray-800 font-bold">Featured Products</h2>
-    <p class="text-gray-800">Check out our featured products below:</p>
-  </div>
+  <div>
+    <!-- Header -->
+    <div class="flex flex-col justify-center items-center gap-4">
+      <h2 class="text-2xl text-gray-800 font-bold">Featured Products</h2>
+      <p class="text-gray-800">Check out our featured products below:</p>
+    </div>
 
-  <div class="flex bg-gray-100 rounded flex-wrap justify-start gap-2 p-4">
-    <ProductCard
-      v-for="(item, index) in products"
-      :key="index"
-      :product="item"
-      @card-click="goToProductDetail(item)"
-      @cart-updated="updateCartCount"
-      @favorite-updated="updateFavoriteCount"
-    />
+    <!-- Products -->
+    <div class="flex bg-gray-100 rounded flex-wrap justify-start gap-2 p-4">
+      <ProductCard
+        v-for="(item, index) in products"
+        :key="index"
+        :product="item"
+        @card-click="goToProductDetail(item)"
+        @cart-updated="updateCartCount"
+        @favorite-updated="updateFavoriteCount"
+        @show-toast="showToastMessage"
+      />
+    </div>
+
+    <!-- Toast Message -->
+    <ToastMessage v-model="showToast" :message="toastMessage" />
   </div>
 </template>
 
 <script>
 import ProductCard from "~/components/Card/productCard.vue";
+import ToastMessage from "~/components/ToastMessage.vue";
 import axios from "axios";
+import { fetchCart, cartCount } from "~/stores/cartStore";
 
 export default {
-  components: {
-    ProductCard,
-  },
+  components: { ProductCard, ToastMessage },
   data() {
     return {
       favoriteCount: 0,
       products: [],
-      cartCount: 0,
+      showToast: false,
+      toastMessage: "",
     };
   },
   created() {
@@ -43,9 +52,17 @@ export default {
         console.error("Error fetching products:", error);
       }
     },
-    updateCartCount(count) {
-      this.$dispatch("cartCountUpdated", count);
+
+    updateCartCount() {
+      // Refresh cart store
+      fetchCart();
     },
+
+    updateFavoriteCount(count) {
+      this.favoriteCount = count;
+      console.log("Favorite count updated:", count);
+    },
+
     goToProductDetail(product) {
       this.$router.push({
         path: "/Product-detail",
@@ -53,9 +70,10 @@ export default {
       });
     },
 
-    updateFavoriteCount(count) {
-      this.favoriteCount = count;
-      console.log("Favorite count updated:", count);
+    showToastMessage(msg) {
+      this.toastMessage = msg;
+      this.showToast = true;
+      setTimeout(() => (this.showToast = false), 3000);
     },
   },
 };

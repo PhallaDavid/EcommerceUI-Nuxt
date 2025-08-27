@@ -1,23 +1,19 @@
-// stores/user.js
+
 import { reactive } from "vue";
 
 export const userStore = reactive({
   user: null,
 
   init() {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      try {
-        this.user = JSON.parse(userData);
-      } catch {
-        this.user = null;
-      }
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      this.user = JSON.parse(savedUser);
     }
   },
 
-  setUser(newUser) {
-    this.user = newUser;
-    localStorage.setItem("user", JSON.stringify(newUser));
+  setUser(user) {
+    this.user = user;
+    localStorage.setItem("user", JSON.stringify(user));
   },
 
   clearUser() {

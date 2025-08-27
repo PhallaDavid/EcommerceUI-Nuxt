@@ -12,8 +12,8 @@
 
 .loader {
   fill: none;
-  stroke: #106ee8;
-  stroke-width: 10;
+  stroke: white;
+  stroke-width: 5;
   stroke-dasharray: 2, 200;
   stroke-dashoffset: 0;
   stroke-linecap: round;

@@ -14,7 +14,7 @@
       </main>
     </div>
 
-    <MessageBox />
+  <ToastMessage v-model:visible="toastVisible" :message="toastMessage" />
     <Footer />
   </div>
 </template>
@@ -24,7 +24,8 @@ import { ref } from "vue";
 import Sidebar from "~/components/sidebar.vue";
 import Header from "~/components/header.vue";
 import Footer from "~/components/footer.vue";
-import MessageBox from "~/components/MessageBox.vue";
+import ToastMessage from "~/components/ToastMessage.vue";
+import { toastMessage, toastVisible } from "~/stores/toastStore";
 
 const sidebarOpen = ref(false);
 </script>
