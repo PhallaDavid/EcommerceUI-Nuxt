@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Header -->
-    <div class="flex flex-col justify-center items-center gap-4">
+    <div class="flex flex-col justify-center items-center pt-10 gap-4">
       <h2 class="text-2xl text-gray-800 font-bold">Featured Products</h2>
       <p class="text-gray-800">Check out our featured products below:</p>
     </div>

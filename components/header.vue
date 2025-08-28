@@ -72,7 +72,20 @@
           to="/favourite"
           class="p-2 rounded-full flex items-center gap-2"
         >
-          <i class="fi fi-rr-heart text-xl"></i>
+          <svg
+            class="w-7 h-7 -ms-2 me-2"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
+            />
+          </svg>
         </nuxt-link>
 
         <!-- Cart -->
@@ -80,7 +93,20 @@
           @click="toggleCartModal"
           class="relative p-2 rounded-full flex items-center gap-2"
         >
-          <i class="fi fi-rr-shopping-bag text-xl"></i>
+          <svg
+            class="w-7 h-7 -ms-2 me-2"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"
+            />
+          </svg>
           <span
             v-if="cartItems.length > 0"
             class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 shadow-md animate-bounce"
@@ -160,7 +186,7 @@ onBeforeUnmount(() => {
   }
 
   to {
-    opacity: 1;
+    opacity: 1; 
     transform: translateY(0);
   }
 }

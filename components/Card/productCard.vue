@@ -4,22 +4,35 @@
       data-aos="fade-right"
       class="flex w-65 h-auto flex-col gap-2 rounded-lg border border-gray-200 bg-gray-100 p-2 transition hover:shadow-lg"
     >
+      <!-- Product Image -->
       <div class="relative">
-        <img
-          v-if="product.images && product.images.length"
-          :src="`http://127.0.0.1:8000${product.images[currentImage]}`"
-          :alt="product.name"
-          class="rounded-lg object-cover w-full h-40 transition-transform duration-500 hover:scale-105"
-        />
-        <img
-          v-else
-          src="/assets/placeholder.jpg"
-          alt="No image available"
-          class="w-full h-40 rounded-lg"
-        />
+        <NuxtLink :to="`/products/${product.id}`">
+          <img
+            v-if="product.images && product.images.length"
+            :src="`http://127.0.0.1:8000${product.images[currentImage]}`"
+            :alt="product.name"
+            class="rounded-lg object-cover w-full h-40 transition-transform duration-500 hover:scale-105"
+          />
+          <img
+            v-else
+            src="/assets/placeholder.jpg"
+            alt="No image available"
+            class="w-full h-40 rounded-lg"
+          />
+        </NuxtLink>
+
+        <!-- Promotion Badge -->
+        <span
+          v-if="isOnPromotion"
+          class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded"
+        >
+          Promotion {{ product.discount_percent || 10 }}%
+        </span>
+
+        <!-- Carousel buttons -->
         <button
           v-if="product.images && product.images.length > 1"
-          @click="prevImage"
+          @click.stop="prevImage"
           class="absolute left-2 top-1/2 transform -translate-y-1/2 rounded-full bg-gray-700 bg-opacity-50 p-1 text-white hover:bg-opacity-75 transition"
         >
           <svg
@@ -37,9 +50,10 @@
             />
           </svg>
         </button>
+
         <button
           v-if="product.images && product.images.length > 1"
-          @click="nextImage"
+          @click.stop="nextImage"
           class="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full bg-gray-700 bg-opacity-50 p-1 text-white hover:bg-opacity-75 transition"
         >
           <svg
@@ -57,9 +71,11 @@
             />
           </svg>
         </button>
+
+        <!-- Favorite toggle -->
         <span
           class="absolute top-2 right-2 cursor-pointer"
-          @click="toggleFavorite"
+          @click.stop="toggleFavorite"
           :title="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
         >
           <svg
@@ -76,12 +92,14 @@
           >
             <path
               d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
-                     2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09 
-                     C13.09 3.81 14.76 3 16.5 3 
-                     19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09 
+                 C13.09 3.81 14.76 3 16.5 3 
+                 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
             />
           </svg>
         </span>
+
+        <!-- Image indicators -->
         <div
           v-if="product.images && product.images.length > 1"
           class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1"
@@ -100,7 +118,11 @@
 
       <!-- Product Info -->
       <div class="flex justify-between pr-2 pl-2">
-        <h1 class="text-xl font-semibold text-gray-700">{{ product.name }}</h1>
+        <NuxtLink :to="`/products/${product.id}`">
+          <h1 class="text-xl font-semibold text-gray-700 hover:underline">
+            {{ product.name }}
+          </h1>
+        </NuxtLink>
         <h1 class="text-sm font-semibold text-gray-700">
           ${{ product.price }}
         </h1>
@@ -173,7 +195,16 @@ export default {
       this.isFavorite = favs.includes(this.product.id);
     }
   },
-
+  computed: {
+    isOnPromotion() {
+      if (!this.product.promotion_start || !this.product.promotion_end)
+        return false;
+      const now = new Date();
+      const start = new Date(this.product.promotion_start);
+      const end = new Date(this.product.promotion_end);
+      return now >= start && now <= end;
+    },
+  },
   methods: {
     prevImage() {
       if (this.product.images && this.product.images.length > 1) {
