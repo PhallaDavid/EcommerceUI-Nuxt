@@ -7,7 +7,7 @@
 
         <!-- Sidebar -->
         <div
-          class="relative bg-white w-96 h-full p-6 overflow-y-auto shadow-xl"
+          class="relative bg-white w-150 h-full p-6 overflow-y-auto shadow-xl"
         >
           <h2 class="text-lg text-gray-800 font-semibold mb-4">
             Shopping Cart
@@ -154,83 +154,58 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { cartItems, cartCount, token, fetchCart, addToCart } from "@/stores/cartStore";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const props = defineProps({ visible: Boolean });
-const cartItems = ref([]);
-const token = ref(null);
+
 const totalAmount = computed(() =>
-  cartItems.value
-    .reduce(
-      (sum, item) => sum + parseFloat(item.product.price) * item.quantity,
-      0
-    )
-    .toFixed(2)
+  cartItems.value.reduce(
+    (sum, item) => sum + parseFloat(item.product.price) * item.quantity,
+    0
+  ).toFixed(2)
 );
 
-// Fetch cart data
-async function fetchCart() {
-  token.value = localStorage.getItem("token");
-  if (!token.value) {
-    cartItems.value = [];
-    return;
-  }
-  try {
-    const res = await axios.get("http://127.0.0.1:8000/api/cart", {
-      headers: { Authorization: `Bearer ${token.value}` },
-    });
-    cartItems.value = res.data || [];
-  } catch (err) {
-    console.error("Error fetching cart:", err);
-  }
-}
-
-// Remove item from cart
 async function removeFromCart(id) {
-  const tokenValue = localStorage.getItem("token");
-  if (!tokenValue) return;
-
+  if (!token.value) return;
   try {
     await axios.delete(`http://127.0.0.1:8000/api/products/${id}/cart`, {
-      headers: { Authorization: `Bearer ${tokenValue}` },
+      headers: { Authorization: `Bearer ${token.value}` },
     });
-    cartItems.value = cartItems.value.filter((item) => item.id !== id);
+    cartItems.value = cartItems.value.filter((i) => i.id !== id);
+    cartCount.value = cartItems.value.reduce((sum, i) => sum + i.quantity, 0);
   } catch (err) {
-    console.error("Error removing item:", err);
+    console.error(err);
   }
 }
 
-// Update item quantity
-async function updateQuantity(item, newQty) {
-  if (newQty < 1) return;
-  const tokenValue = localStorage.getItem("token");
-  if (!tokenValue) return;
-
+async function updateQuantity(item, qty) {
+  if (qty < 1 || !token.value) return;
   try {
     await axios.put(
       `http://127.0.0.1:8000/api/products/${item.product_id}/cart`,
-      { quantity: newQty },
-      { headers: { Authorization: `Bearer ${tokenValue}` } }
+      { quantity: qty },
+      { headers: { Authorization: `Bearer ${token.value}` } }
     );
-    item.quantity = newQty;
+    item.quantity = qty;
+    cartCount.value = cartItems.value.reduce((sum, i) => sum + i.quantity, 0);
   } catch (err) {
-    console.error("Error updating quantity:", err);
+    console.error(err);
   }
 }
 
-// Checkout action
 function checkout() {
-  alert("Proceed to checkout!");
+  router.push("/summary_order");
 }
+
 onMounted(() => {
   fetchCart();
-  window.addEventListener("cart-updated", fetchCart);
-});
-onBeforeUnmount(() => {
-  window.removeEventListener("cart-updated", fetchCart);
 });
 </script>
+
 
 <style scoped>
 .slide-enter-active,

@@ -127,7 +127,9 @@
           ${{ product.price }}
         </h1>
       </div>
-      <span class="pl-2 text-xs text-gray-600">{{ product.description }}</span>
+      <span class="pl-2 text-xs text-gray-600 line-clamp-2">
+        {{ product.description }}
+      </span>
 
       <!-- Rating -->
       <div class="flex flex-row gap-1 pl-2">

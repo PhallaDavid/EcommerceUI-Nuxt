@@ -1,14 +1,13 @@
 <template>
-  <div class="max-w-7xl mx-auto bg-gray-100 rounded-lg relative">
-    <div class="flex justify-between items-center px-4 mb-4">
+  <div class="max-w-7xl mx-auto bg-gray-100 rounded-lg p-4 relative">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-4 px-2">
       <p class="text-gray-800 text-sm font-semibold">Promotion Products</p>
-      <nuxt-link
-        class="text-gray-800 text-sm font-semibold hover:underline"
-        to="/products"
-        >See All</nuxt-link
-      >
+      <NuxtLink class="text-gray-800 text-sm font-semibold hover:underline" to="/products">See All</NuxtLink>
     </div>
-    <div ref="slider" class="overflow-hidden relative" @wheel="onWheel">
+
+    <!-- Slider -->
+    <div ref="slider" class="overflow-hidden relative" @wheel.prevent="onWheel">
       <div
         class="flex transition-transform duration-500 ease-in-out"
         :style="{ transform: `translateX(-${currentIndex * cardWidth}px)` }"
@@ -16,48 +15,29 @@
         <div
           v-for="product in products"
           :key="product.id"
-          class="flex-shrink-0 w-[280px] px-2"
+          class="flex-shrink-0 w-64 sm:w-56 md:w-60 lg:w-64 px-2"
           data-aos="fade-right"
         >
           <ProductCard :product="product" />
         </div>
       </div>
+
+      <!-- Navigation Buttons -->
       <button
         @click="prevSlide"
-        class="absolute top-1/2 left-2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75"
+        class="absolute top-1/2 left-2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 z-10"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-6 h-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 19l-7-7 7-7"
-          />
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
       </button>
+
       <button
         @click="nextSlide"
-        class="absolute top-1/2 right-2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75"
+        class="absolute top-1/2 right-2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 z-10"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-6 h-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5l7 7-7 7"
-          />
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg>
       </button>
     </div>
