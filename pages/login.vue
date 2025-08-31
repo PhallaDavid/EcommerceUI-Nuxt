@@ -1,13 +1,16 @@
 <template>
-  <div class="flex justify-center items-center min-h-screen">
+  <div class="flex justify-center items-center ">
     <div class="w-full max-w-md">
-      <div class="flex flex-col gap-4 rounded-xl bg-gray-200 shadow-xl p-12">
+      <div class="flex flex-col gap-4 rounded-lg p-24 border border-gray-200">
+        <!-- Welcome -->
         <span class="text-center text-lg font-bold text-blue-500">
-          Welcome Back...!
+          {{ $t("common.welcome") }}
         </span>
 
         <!-- Email Field -->
-        <label for="email" class="text-sm text-gray-700">Email</label>
+        <label for="email" class="text-sm text-gray-700">
+          {{ $t("auth.email") }}
+        </label>
         <div class="relative w-full">
           <span
             class="absolute inset-y-0 left-3 flex items-center text-blue-500"
@@ -32,13 +35,15 @@
             v-model="email"
             type="text"
             id="email"
-            placeholder="Enter Your Email"
-            class="w-full rounded-full bg-indigo-50 py-2 pr-4 pl-10 text-gray-800 focus:ring-2 focus:text-blue-500 focus:outline-none"
+            :placeholder="$t('auth.email')"
+            class="w-full rounded-full bg-indigo-50 py-4 pr-4 pl-10 text-gray-800 focus:ring-2 focus:text-blue-500 focus:outline-none"
           />
         </div>
 
         <!-- Password Field -->
-        <label for="password" class="text-sm text-gray-700">Password</label>
+        <label for="password" class="text-sm text-gray-700">
+          {{ $t("auth.password") }}
+        </label>
         <div class="relative w-full">
           <span
             class="absolute inset-y-0 left-3 flex items-center text-blue-500"
@@ -63,8 +68,8 @@
             v-model="password"
             :type="showPassword ? 'text' : 'password'"
             id="password"
-            placeholder="Enter Your Password"
-            class="w-full rounded-full bg-indigo-50 py-2 pr-10 pl-10 text-gray-800 focus:ring-2 focus:text-blue-500 focus:outline-none"
+            :placeholder="$t('auth.password')"
+            class="w-full rounded-full bg-indigo-50 py-4 pr-10 pl-10 text-gray-800 focus:ring-2 focus:text-blue-500 focus:outline-none"
           />
           <span
             @click="togglePassword"
@@ -106,25 +111,25 @@
         </div>
 
         <span class="cursor-pointer self-end text-blue-500 hover:underline">
-          Forget password?
+          {{ $t("auth.forgotPassword") }}
         </span>
 
         <button
           @click="login"
           :disabled="loading"
-          class="w-full rounded-full bg-blue-500 px-4 py-2 font-semibold text-white flex justify-center items-center gap-2"
+          class="w-full rounded-full bg-blue-500 px-4 py-4 font-semibold text-white flex justify-center items-center gap-2"
         >
-          <span v-if="!loading">Sign In</span>
+          <span v-if="!loading">{{ $t("auth.signIn") }}</span>
           <Spinner v-else />
         </button>
 
         <div class="text-center mt-2 text-gray-700">
-          <span>Don't have an account?</span>
+          <span>{{ $t("auth.dontHaveAccount") }}</span>
           <button
             @click="$router.push('/register')"
             class="text-blue-500 hover:underline ml-1"
           >
-            Sign Up
+            {{ $t("auth.signUp") }}
           </button>
         </div>
       </div>
@@ -132,49 +137,49 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
 import axios from "axios";
 import Spinner from "~/components/Spinner.vue";
 import { triggerToast } from "~/stores/toastStore";
+import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
-export default {
-  components: { Spinner },
-  data() {
-    return {
-      email: "",
-      password: "",
-      showPassword: false,
-      loading: false,
-    };
-  },
-  methods: {
-    togglePassword() {
-      this.showPassword = !this.showPassword;
-    },
-    async login() {
-      this.loading = true;
-      try {
-        const res = await axios.post("http://localhost:8000/api/login", {
-          email: this.email,
-          password: this.password,
-        });
+const router = useRouter();
+const { t } = useI18n();
 
-        triggerToast("Login successful! Redirecting...", "success");
+const email = ref("");
+const password = ref("");
+const showPassword = ref(false);
+const loading = ref(false);
 
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        localStorage.setItem("email", this.email);
+function togglePassword() {
+  showPassword.value = !showPassword.value;
+}
 
-        this.$router.push("/otp");
-      } catch (err) {
-        let msg = "Login failed. Please try again.";
-        if (err.response?.status === 422)
-          msg = err.response.data.errors.email?.[0] || msg;
-        triggerToast(msg, "error");
-      } finally {
-        this.loading = false;
-      }
-    },
-  },
-};
+async function login() {
+  loading.value = true;
+  try {
+    const res = await axios.post("http://localhost:8000/api/login", {
+      email: email.value,
+      password: password.value,
+    });
+
+    triggerToast(t("messages.loginSuccess"), "success");
+
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+    localStorage.setItem("email", email.value);
+
+    router.push("/otp");
+  } catch (err) {
+    let msg = t("messages.loginFailed");
+    if (err.response?.status === 422) {
+      msg = err.response.data.errors.email?.[0] || msg;
+    }
+    triggerToast(msg, "error");
+  } finally {
+    loading.value = false;
+  }
+}
 </script>

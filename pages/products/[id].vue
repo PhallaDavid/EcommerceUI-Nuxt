@@ -4,41 +4,57 @@
     <section class="bg-white">
       <div class="max-w-screen-xl mx-auto 2xl:px-0">
         <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16" v-if="product">
+          <!-- Product Images -->
           <div class="relative overflow-hidden rounded-lg">
-            <div class="relative overflow-hidden rounded-lg shadow">
+            <div
+              class="relative overflow-hidden rounded-lg shadow zoom-container"
+            >
               <transition name="slide" mode="out-in">
                 <img
                   :key="mainImage"
                   :src="mainImage"
                   :alt="product.name"
-                  class="w-full max-w-[600px] h-auto object-cover rounded-lg cursor-pointer"
+                  class="w-full max-w-[600px] h-auto object-cover rounded-lg cursor-pointer zoom-image"
                   @click="openImageModal(currentIndex)"
+                  @mousemove="handleMouseMove"
+                  @mouseenter="showZoom = true"
+                  @mouseleave="showZoom = false"
                 />
               </transition>
 
-              <!-- Image Count (Centered at bottom inside image) -->
+              <!-- Zoom Preview -->
               <div
-                class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/60 text-white px-3 py-1 rounded-full text-sm shadow"
+                v-if="showZoom"
+                class="zoom-preview"
+                :style="{
+                  backgroundImage: `url(${mainImage})`,
+                  backgroundPosition: zoomPosition,
+                }"
+              ></div>
+
+              <!-- Image Count -->
+              <div
+                class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/60 text-white px-3 py-1 rounded-full text-sm shadow z-10"
               >
                 {{ currentIndex + 1 }}/{{ images.length }}
               </div>
             </div>
 
-            <!-- Prev Button -->
+            <!-- Prev / Next Buttons -->
             <button
               @click="prevImage"
               class="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-800/50 text-white p-2 rounded-full hover:bg-gray-800"
             >
               ‹
             </button>
-
-            <!-- Next Button -->
             <button
               @click="nextImage"
               class="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-800/50 text-white p-2 rounded-full hover:bg-gray-800"
             >
               ›
             </button>
+
+            <!-- Thumbnails -->
             <div class="flex gap-2 mt-4 justify-center">
               <img
                 v-for="(img, idx) in visibleThumbnails"
@@ -54,8 +70,8 @@
             </div>
           </div>
 
+          <!-- Product Info -->
           <div class="mt-6 sm:mt-8 lg:mt-0">
-            <!-- Product Name -->
             <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl">
               {{ product.name }}
             </h1>
@@ -91,13 +107,17 @@
                 </div>
                 <p class="text-sm text-gray-500">({{ product.rating || 0 }})</p>
                 <span class="text-sm text-gray-900">
-                  {{ product.sold_count || 0 }} Sold
+                  {{ product.sold_count || 0 }} {{ $t("product.sold") }}
                 </span>
               </div>
             </div>
+
+            <!-- Options -->
             <div class="mt-4 space-y-4">
               <div v-if="product.sizes?.length">
-                <label class="text-sm font-medium text-gray-700">Size:</label>
+                <label class="text-sm font-medium text-gray-700"
+                  >{{ $t("product.size") }}:</label
+                >
                 <div class="flex gap-2 mt-1">
                   <button
                     v-for="size in product.sizes"
@@ -115,7 +135,9 @@
                 </div>
               </div>
               <div v-if="product.colors?.length">
-                <label class="text-sm font-medium text-gray-700">Color:</label>
+                <label class="text-sm font-medium text-gray-700"
+                  >{{ $t("product.color") }}:</label
+                >
                 <div class="flex gap-2 mt-1">
                   <span
                     v-for="color in product.colors"
@@ -133,6 +155,7 @@
               </div>
             </div>
 
+            <!-- Buttons -->
             <div
               class="mt-6 flex flex-col sm:flex-row sm:items-center sm:gap-4"
             >
@@ -156,7 +179,11 @@
                     d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
                   />
                 </svg>
-                {{ isFavorite ? "Favourited" : "Add to Favourites" }}
+                {{
+                  isFavorite
+                    ? $t("product.favourited")
+                    : $t("product.addToFavourites")
+                }}
               </button>
 
               <button
@@ -180,9 +207,13 @@
                     d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"
                   />
                 </svg>
-                <span v-if="!loading">{{
-                  product.stock > 0 ? "Add to Cart" : "Out of Stock"
-                }}</span>
+                <span v-if="!loading">
+                  {{
+                    product.stock > 0
+                      ? $t("product.addToCart")
+                      : $t("product.outOfStock")
+                  }}
+                </span>
                 <svg
                   v-else
                   class="animate-spin h-5 w-5 text-white"
@@ -211,20 +242,16 @@
 
             <!-- Description -->
             <p class="mb-6 line-clamp-2 text-gray-500">
-              {{
-                product.description ||
-                " lorem10If you want, I can also integrate it into your cleaned-up product page with the image slider and options, so the full page is neat and modular. ."
-              }}
+              {{ product.description || $t("product.noDescription") }}
             </p>
           </div>
         </div>
 
         <reviewCard v-if="product" :productId="product.id" />
-
-        <!-- Loading State -->
         <LoadingOverlay v-else />
       </div>
     </section>
+
     <ImageModal
       :visible="showModal"
       :images="images"
@@ -232,7 +259,6 @@
       @close="showModal = false"
     />
     <relatedCart v-if="product" :productId="product.id" />
-
   </div>
 </template>
 
@@ -247,7 +273,13 @@ import ImageModal from "@/components/ImageModal.vue";
 import relatedCart from "@/components/Card/relatedCart.vue";
 
 export default {
-  components: { Breadcrumb, LoadingOverlay, reviewCard, ImageModal, relatedCart },
+  components: {
+    Breadcrumb,
+    LoadingOverlay,
+    reviewCard,
+    ImageModal,
+    relatedCart,
+  },
   data() {
     return {
       showModal: false,
@@ -261,6 +293,10 @@ export default {
       maxThumbnails: 5,
       isFavorite: false,
       loading: false,
+      showZoom: false,
+      zoomPosition: "0% 0%",
+      selectedSize: "",
+      selectedColor: "",
     };
   },
   computed: {
@@ -303,8 +339,8 @@ export default {
         this.product.colors = ["#FF0000", "#00FF00", "#0000FF"];
         this.product.heights = ["Short", "Medium", "Tall"];
         this.breadcrumbItems = [
-          { label: "Home", to: "/" },
-          { label: "Products", to: "/products" },
+          { label: this.$t("nav.home"), to: "/" },
+          { label: this.$t("nav.products"), to: "/products" },
           { label: this.product.name, to: `/products/${this.product.id}` },
         ];
         this.images =
@@ -393,6 +429,12 @@ export default {
         (this.currentIndex - 1 + this.images.length) % this.images.length;
       this.mainImage = this.images[this.currentIndex];
     },
+    handleMouseMove(event) {
+      const rect = event.target.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+      this.zoomPosition = `${x}% ${y}%`;
+    },
   },
 };
 </script>
@@ -406,5 +448,30 @@ export default {
 }
 .slide-leave-to {
   transform: translateX(-100%);
+}
+
+.zoom-container {
+  position: relative;
+}
+
+.zoom-preview {
+  position: absolute;
+  top: 0;
+  right: -420px;
+  width: 400px;
+  height: 400px;
+  background-size: 200%;
+  background-repeat: no-repeat;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 20;
+  pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+  .zoom-preview {
+    display: none;
+  }
 }
 </style>

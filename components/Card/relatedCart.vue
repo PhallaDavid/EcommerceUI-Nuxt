@@ -13,7 +13,7 @@
           :key="product.id"
           class="flex-shrink-0 w-[220px] px-2"
         >
-          <NuxtLink :to="`/products/${product.id}`">
+          <NuxtLink :to="localePath(`/products/${product.id}`)">
             <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg">
               <img
                 v-if="product.images && product.images.length"
@@ -50,9 +50,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { useLocalePath } from "#imports";
 import axios from "axios";
 
 const route = useRoute();
+const localePath = useLocalePath();
 const productId = route.params.id; // automatically get product ID from URL
 
 const relatedProducts = ref([]);

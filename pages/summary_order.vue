@@ -74,9 +74,11 @@ const createOrder = async () => {
 
 <template>
   <div class="flex flex-col w-full sm:px-6 lg:px-8 space-y-6">
-    <h2 class="text-2xl font-semibold text-gray-900">Order Summary</h2>
+    <h2 class="text-2xl font-semibold text-gray-900">
+      {{ $t("order.orderSummary") }}
+    </h2>
     <h4 class="text-lg font-semibold text-gray-700">
-      Billing & Delivery Information
+      {{ $t("order.billingAndDeliveryInfo") }}
     </h4>
 
     <div class="flex flex-col lg:flex-row gap-8">
@@ -85,9 +87,11 @@ const createOrder = async () => {
         <table class="w-full text-left table-hover">
           <thead>
             <tr class="border-b border-gray-200">
-              <th class="py-2 text-gray-600">Product</th>
-              <th class="py-2 text-gray-600">Quantity</th>
-              <th class="py-2 text-gray-600 text-right">Price</th>
+              <th class="py-2 text-gray-600">{{ $t("common.product") }}</th>
+              <th class="py-2 text-gray-600">{{ $t("common.quantity") }}</th>
+              <th class="py-2 text-gray-600 text-right">
+                {{ $t("common.price") }}
+              </th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200">
@@ -119,19 +123,21 @@ const createOrder = async () => {
 
       <!-- Order Summary Box -->
       <div class="w-full lg:w-1/3 bg-gray-50 p-6 rounded-lg shadow">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Order Summary</h3>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+          {{ $t("order.orderSummary") }}
+        </h3>
         <div class="flex justify-between py-2 text-gray-700">
-          <span>Subtotal</span>
+          <span>{{ $t("common.subtotal") }}</span>
           <span>${{ totalAmount }}</span>
         </div>
         <div class="flex justify-between py-2 text-gray-700">
-          <span>Shipping</span>
+          <span>{{ $t("common.shipping") }}</span>
           <span>$50</span>
         </div>
         <div
           class="flex justify-between py-2 text-gray-700 border-t border-gray-200 mt-2 pt-2 font-semibold"
         >
-          <span>Total</span>
+          <span>{{ $t("common.total") }}</span>
           <span>${{ (parseFloat(totalAmount) + 50).toFixed(2) }}</span>
         </div>
         <button
@@ -139,7 +145,7 @@ const createOrder = async () => {
           @click="createOrder"
           class="w-full mt-4 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-50"
         >
-          {{ loading ? "Processing..." : "Proceed to Checkout" }}
+          {{ loading ? $t("common.loading") : $t("order.placeOrder") }}
         </button>
       </div>
     </div>

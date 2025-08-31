@@ -6,7 +6,7 @@
       <ul class="space-y-3">
         <li>
           <NuxtLink
-            to="/category/home"
+            :to="localePath('/category/home')"
             class="block px-4 py-2 bg-gray-200 rounded-lg text-lg hover:bg-blue-500 hover:text-white transition"
           >
             Home
@@ -14,7 +14,7 @@
         </li>
         <li>
           <NuxtLink
-            to="/category/about"
+            :to="localePath('/category/about')"
             class="block px-4 py-2 bg-gray-200 rounded-lg text-lg hover:bg-blue-500 hover:text-white transition"
           >
             About
@@ -22,7 +22,7 @@
         </li>
         <li>
           <NuxtLink
-            to="/category/contact"
+            :to="localePath('/category/contact')"
             class="block px-4 py-2 bg-gray-200 rounded-lg text-lg hover:bg-blue-500 hover:text-white transition"
           >
             Contact
@@ -30,7 +30,7 @@
         </li>
         <li>
           <NuxtLink
-            to="/category/services"
+            :to="localePath('/category/services')"
             class="block px-4 py-2 bg-gray-200 rounded-lg text-lg hover:bg-blue-500 hover:text-white transition"
           >
             Services
@@ -38,7 +38,7 @@
         </li>
         <li>
           <NuxtLink
-            to="/category/blog"
+            :to="localePath('/category/blog')"
             class="block px-4 py-2 bg-gray-200 rounded-lg text-lg hover:bg-blue-500 hover:text-white transition"
           >
             Blog
@@ -46,7 +46,7 @@
         </li>
         <li>
           <NuxtLink
-            to="/category/faq"
+            :to="localePath('/category/faq')"
             class="block px-4 py-2 bg-gray-200 rounded-lg text-lg hover:bg-blue-500 hover:text-white transition"
           >
             FAQ
@@ -54,7 +54,7 @@
         </li>
         <li>
           <NuxtLink
-            to="/category/settings"
+            :to="localePath('/category/settings')"
             class="block px-4 py-2 bg-gray-200 rounded-lg text-lg hover:bg-blue-500 hover:text-white transition"
           >
             Settings
@@ -67,7 +67,7 @@
     <ul class="space-y-3 mt-6">
       <li>
         <NuxtLink
-          to="/category/testimonials"
+          :to="localePath('/category/testimonials')"
           class="block px-4 py-2 bg-gray-200 rounded-lg text-lg hover:bg-blue-500 hover:text-white transition"
         >
           Profile
@@ -75,7 +75,7 @@
       </li>
       <li>
         <NuxtLink
-          to="/category/logout"
+          :to="localePath('/category/logout')"
           class="block px-4 py-2 bg-gray-200 rounded-lg text-lg hover:bg-blue-500 hover:text-white transition"
         >
           Logout
@@ -84,3 +84,9 @@
     </ul>
   </div>
 </template>
+
+<script setup>
+import { useLocalePath } from '#imports'
+
+const localePath = useLocalePath()
+</script>

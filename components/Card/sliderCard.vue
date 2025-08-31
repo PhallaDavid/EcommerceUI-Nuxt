@@ -2,11 +2,11 @@
   <div class="max-w-7xl mx-auto relative">
     <!-- Header -->
     <div class="flex justify-between items-center mb-4">
-      <p class="text-gray-800 text-sm font-semibold">Category</p>
+      <p class="text-gray-800 text-sm font-semibold">{{$t("nav.categories")}}</p>
       <NuxtLink
         class="text-gray-800 text-sm font-semibold hover:underline"
-        to="/"
-        >See All</NuxtLink
+        :to="localePath('/')"
+        >{{$t("nav.seeAll")}}</NuxtLink
       >
     </div>
 
@@ -27,7 +27,7 @@
           data-aos="fade-right"
         >
           <NuxtLink
-            :to="`/categories/${category.id}`"
+            :to="localePath(`/categories/${category.id}`)"
             class="flex flex-col items-center bg-white p-4 rounded-lg shadow hover:shadow-lg transition"
           >
             <img
@@ -96,8 +96,13 @@
 import AOS from "aos";
 import "aos/dist/aos.css";
 import axios from "axios";
+import { useLocalePath } from "#imports";
 
 export default {
+  setup() {
+    const localePath = useLocalePath();
+    return { localePath };
+  },
   data() {
     return {
       currentIndex: 0,

@@ -1,10 +1,12 @@
 <template>
-  <div class="flex justify-center items-center min-h-screen">
-    <div class="w-96 bg-gray-200 p-12 rounded-xl shadow-xl">
+  <div class="flex justify-center items-center">
+    <div class="w-96 border border-gray-300 p-24 rounded-lg">
       <!-- Header -->
-      <h2 class="text-center text-blue-500 text-xl font-bold mb-2">OTP Verification</h2>
+      <h2 class="text-center text-blue-500 text-xl font-bold mb-2">
+        {{ $t("auth.otp") }}
+      </h2>
       <p class="text-center text-gray-700 text-sm mb-6">
-        6-digit code has been sent to <br />
+        {{ $t("messages.otpSent") }} <br />
         <span class="text-blue-500 font-semibold">{{ email }}</span>
       </p>
 
@@ -26,12 +28,12 @@
       </div>
 
       <!-- Verify Button -->
-      <button 
+      <button
         class="w-full py-2 mb-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full font-semibold hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 flex justify-center items-center gap-2"
         @click="verifyOtp"
         :disabled="loadingVerify || loadingResend"
       >
-        <span v-if="!loadingVerify">Verify</span>
+        <span v-if="!loadingVerify">{{ $t("auth.verifyOtp") }}</span>
         <Spinner v-else />
       </button>
 
@@ -42,8 +44,8 @@
         :disabled="countdown > 0 || loadingResend || loadingVerify"
       >
         <span v-if="!loadingResend">
-          <span v-if="countdown === 0">Resend OTP</span>
-          <span v-else>Resend in {{ countdown }}s</span>
+          <span v-if="countdown === 0">{{ $t("auth.resendOtp") }}</span>
+          <span v-else>{{ $t("messages.resendIn") }} {{ countdown }}s</span>
         </span>
         <Spinner v-else />
       </button>
@@ -52,7 +54,7 @@
 </template>
 
 <script>
-import Spinner from '~/components/Spinner.vue';
+import Spinner from "~/components/Spinner.vue";
 
 export default {
   components: { Spinner },
@@ -70,7 +72,6 @@ export default {
     this.email = localStorage.getItem("email") || "";
     this.sendOtp();
 
-    // Focus the first input after rendering
     this.$nextTick(() => {
       this.$refs.otpInputs?.[0]?.focus();
     });
@@ -130,14 +131,14 @@ export default {
 
         const result = await response.json();
         if (response.ok && result.message.toLowerCase().includes("success")) {
-          alert("OTP Verified Successfully!");
+          alert(this.$t("messages.otpVerified"));
           this.$router.push("/");
         } else {
-          alert("Invalid OTP. Try again.");
+          alert(this.$t("messages.invalidOtp"));
         }
       } catch (error) {
         console.error("OTP verify error", error);
-        alert("An error occurred during verification. Please try again.");
+        alert(this.$t("messages.otpError"));
       } finally {
         this.loadingVerify = false;
       }

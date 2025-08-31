@@ -1,14 +1,16 @@
 <template>
-  <div class="w-full max-w-7xl mx-auto overflow-hidden rounded-lg relative">
+  <div
+    class="w-full max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-auto overflow-hidden rounded-lg relative"
+  >
     <div
       v-if="loading"
-      class="animate-pulse w-[1300px] h-44 sm:h-60 md:h-[360px] lg:h-[400px] xl:h-[480px] bg-gray-200 rounded-lg relative"
+      class="animate-pulse w-full h-44 sm:h-60 md:h-[360px] lg:h-[400px] xl:h-[480px] bg-gray-200 rounded-lg relative"
     ></div>
 
     <!-- Banner Wrapper -->
     <div
       v-else
-      class="relative w-[1300px] h-44 sm:h-60 md:h-[360px] lg:h-[400px] xl:h-[480px]"
+      class="relative w-full h-44 sm:h-60 md:h-[360px] lg:h-[400px] xl:h-[480px]"
     >
       <transition-group name="fade" tag="div" class="w-full h-full relative">
         <div
@@ -33,13 +35,13 @@
     </div>
     <button
       @click="prevBanner"
-      class="absolute top-1/2 left-4 -translate-y-1/2 p-2 text-white bg-gray-800 rounded-full hover:bg-gray-700 z-10"
+      class="absolute top-1/2 left-2 sm:left-4 -translate-y-1/2 p-1.5 sm:p-2 text-white bg-gray-800/80 hover:bg-gray-700/80 rounded-full z-10 transition-all duration-200"
       :disabled="bannersWithImages.length === 0"
       aria-label="Previous banner"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="w-6 h-6"
+        class="w-4 h-4 sm:w-6 sm:h-6"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -56,13 +58,13 @@
     <!-- Next Button -->
     <button
       @click="nextBanner"
-      class="absolute top-1/2 right-4 -translate-y-1/2 p-2 text-white bg-gray-800 rounded-full hover:bg-gray-700 z-10"
+      class="absolute top-1/2 right-2 sm:right-4 -translate-y-1/2 p-1.5 sm:p-2 text-white bg-gray-800/80 hover:bg-gray-700/80 rounded-full z-10 transition-all duration-200"
       :disabled="bannersWithImages.length === 0"
       aria-label="Next banner"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="w-6 h-6"
+        class="w-4 h-4 sm:w-6 sm:h-6"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -75,6 +77,26 @@
         />
       </svg>
     </button>
+
+    <!-- Dots Navigation -->
+    <div
+      v-if="bannersWithImages.length > 1"
+      class="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex space-x-1.5 sm:space-x-2 z-10"
+    >
+      <button
+        v-for="(banner, index) in bannersWithImages"
+        :key="`dot-${banner.id}`"
+        @click="goToBanner(index)"
+        :class="[
+          'rounded-full transition-all duration-300',
+          'w-2 h-2 sm:w-3 sm:h-3',
+          index === currentIndex
+            ? 'bg-white scale-125 shadow-lg'
+            : 'bg-white/50 hover:bg-white/75',
+        ]"
+        :aria-label="`Go to banner ${index + 1}`"
+      ></button>
+    </div>
   </div>
 </template>
 
@@ -135,6 +157,9 @@ export default {
       this.currentIndex =
         (this.currentIndex - 1 + this.bannersWithImages.length) %
         this.bannersWithImages.length;
+    },
+    goToBanner(index) {
+      this.currentIndex = index;
     },
     onImageError(event) {
       event.target.src = this.fallbackImage;

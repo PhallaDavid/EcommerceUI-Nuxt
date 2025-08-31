@@ -6,7 +6,7 @@
     >
       <!-- Product Image -->
       <div class="relative">
-        <NuxtLink :to="`/products/${product.id}`">
+        <NuxtLink :to="localePath(`/products/${product.id}`)">
           <img
             v-if="product.images && product.images.length"
             :src="`http://127.0.0.1:8000${product.images[currentImage]}`"
@@ -118,7 +118,7 @@
 
       <!-- Product Info -->
       <div class="flex justify-between pr-2 pl-2">
-        <NuxtLink :to="`/products/${product.id}`">
+        <NuxtLink :to="localePath(`/products/${product.id}`)">
           <h1 class="text-xl font-semibold text-gray-700 hover:underline">
             {{ product.name }}
           </h1>
@@ -184,9 +184,14 @@ import { token, addToCart as addCartItem, fetchCart } from "~/stores/cartStore";
 import { triggerToast } from "~/stores/toastStore";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useLocalePath } from '#imports'
 
 export default {
   components: { Spinner },
+  setup() {
+    const localePath = useLocalePath()
+    return { localePath }
+  },
   props: { product: { type: Object, required: true } },
   data() {
     return { isFavorite: false, loading: false, currentImage: 0 };
