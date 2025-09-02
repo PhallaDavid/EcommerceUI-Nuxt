@@ -15,7 +15,7 @@ export default {
     async fetchFavourites() {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/products/favourite",
+          "http://127.0.0.1:8000/api/products/favourites",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

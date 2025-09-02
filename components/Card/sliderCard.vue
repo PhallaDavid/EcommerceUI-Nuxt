@@ -21,7 +21,7 @@
         :style="{ transform: `translateX(-${currentIndex * cardWidth}px)` }"
       >
         <div
-          v-for="category in categories"
+          v-for="category in categoriesToShow"
           :key="category.id"
           class="flex-shrink-0 w-64 p-4"
           data-aos="fade-right"
@@ -51,6 +51,7 @@
 
       <!-- Navigation Buttons -->
       <button
+        v-if="categories.length > visibleCards"
         @click="prevSlide"
         class="absolute top-1/2 left-2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 z-10"
       >
@@ -70,6 +71,7 @@
         </svg>
       </button>
       <button
+        v-if="categories.length > visibleCards"
         @click="nextSlide"
         class="absolute top-1/2 right-2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 z-10"
       >
@@ -106,16 +108,24 @@ export default {
   data() {
     return {
       currentIndex: 0,
-      cardWidth: 256, // matches w-64 (Tailwind)
+      cardWidth: 256, // matches w-64
       categories: [],
-      visibleCards: 0,
+      visibleCards: 5, // default to 5
     };
   },
-  computed: {
-    maxIndex() {
-      return Math.max(this.categories.length - this.visibleCards, 0);
-    },
+computed: {
+  categoriesToShow() {
+    if (!this.categories || this.categories.length === 0) {
+      return []; // no categories at all
+    }
+    if (this.categories.length < 5) {
+      const repeatTimes = Math.ceil(5 / this.categories.length);
+      return [].concat(...Array(repeatTimes).fill(this.categories)).slice(0, 5);
+    }
+    return this.categories;
   },
+},
+
   created() {
     this.fetchCategories();
   },

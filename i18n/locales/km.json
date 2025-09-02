@@ -32,6 +32,7 @@
     "submit": "ដាក់ស្នើ",
     "close": "បិទ",
     "open": "បើក",
+    "retry": "ព្យាយាមម្តងទៀត",
     "yes": "បាទ/ចាស",
     "no": "ទេ",
     "ok": "យល់ព្រម",
@@ -123,11 +124,24 @@
     "placeOrder": "ដាក់ការបញ្ជាទិញ",
     "trackOrder": "តាមដានការបញ្ជាទិញ",
     "cancelOrder": "បោះបង់ការបញ្ជាទិញ",
+    "buyAgain": "ទិញម្តងទៀត",
+    "viewOrder": "មើល",
+    "allOrders": "ការបញ្ជាទិញទាំងអស់",
+    "completed": "បានបញ្ចប់",
     "pending": "កំពុងរង់ចាំ",
     "processing": "កំពុងដំណើរការ",
     "shipped": "បានដឹកជញ្ជូន",
     "delivered": "បានដល់",
-    "cancelled": "បានបោះបង់"
+    "cancelled": "បានបោះបង់",
+    "noOrders": "រកមិនឃើញការបញ្ជាទិញ",
+    "noOrdersMessage": "អ្នកមិនទាន់បានដាក់ការបញ្ជាទិញនៅឡើយទេ។",
+    "billingAndDeliveryInfo": "ព័ត៌មានវិក្កយបត្រនិងការដឹកជញ្ជូន",
+    "deliveryLocation": "ទីតាំងដឹកជញ្ជូន",
+    "selectLocation": "ជ្រើសរើសទីតាំង",
+    "useCurrentLocation": "ប្រើទីតាំងបច្ចុប្បន្ន",
+    "chooseOnMap": "ជ្រើសរើសលើផែនទី",
+    "locationSelected": "បានជ្រើសរើសទីតាំង",
+    "selectLocationFirst": "សូមជ្រើសរើសទីតាំងដឹកជញ្ជូនជាមុនសិន"
   },
   "profile": {
     "profile": "ប្រវត្តិរូប",
@@ -147,7 +161,12 @@
     "notifications": "ការជូនដំណឹង",
     "privacy": "ភាពឯកជន",
     "security": "សុវត្ថិភាព",
-    "changePassword": "ផ្លាស់ប្តូរពាក្យសម្ងាត់"
+    "changePassword": "ផ្លាស់ប្តូរពាក្យសម្ងាត់",
+    "fullName": "ឈ្មោះពេញ",
+    "city": "ទីក្រុង",
+    "state": "រដ្ឋ",
+    "zip": "លេខកូដប្រៃសណីយ៍",
+    "galleryImages": "រូបភាពវិច្ឆិកា"
   },
   "footer": {
     "aboutUs": "អំពីយើង",
@@ -165,6 +184,23 @@
     "faq": "សំណួរញឹកញាប់",
     "returns": "ការត្រលប់",
     "shipping": "ព័ត៌មានដឹកជញ្ជូន"
+  },
+  "contact": {
+    "contactSales": "ទំនាក់ទំនងការលក់",
+    "contactDescription": "ទំនាក់ទំនងជាមួយក្រុមការលក់របស់យើងសម្រាប់សំណួរឬសំណួរណាមួយ។",
+    "firstName": "នាមខ្លួន",
+    "lastName": "នាមត្រកូល",
+    "company": "ក្រុមហ៊ុន",
+    "email": "អ៊ីមែល",
+    "phoneNumber": "លេខទូរស័ព្ទ",
+    "countryUS": "សហរដ្ឋអាមេរិក",
+    "countryCA": "កាណាដា",
+    "countryEU": "សហភាពអឺរ៉ុប",
+    "phonePlaceholder": "123-456-7890",
+    "message": "សារ",
+    "agreeToPolicy": "ដោយជ្រើសរើសនេះ អ្នកយល់ព្រមទៅនឹង",
+    "privacyPolicy": "គោលការណ៍ភាពឯកជន",
+    "submitButton": "តោះនិយាយ"
   },
   "messages": {
     "loginSuccess": "ចូលប្រព័ន្ធបានជោគជ័យ",

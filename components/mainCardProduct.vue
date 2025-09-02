@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto ">
+  <div class="max-w-7xl mx-auto">
     <!-- Header -->
     <div
       class="flex flex-col justify-center items-center gap-2 mb-6 text-center"

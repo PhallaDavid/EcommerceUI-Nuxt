@@ -31,6 +31,7 @@
     "submit": "提交",
     "close": "关闭",
     "open": "打开",
+    "retry": "重试",
     "yes": "是",
     "no": "否",
     "ok": "确定",
@@ -116,11 +117,17 @@
     "placeOrder": "下订单",
     "trackOrder": "跟踪订单",
     "cancelOrder": "取消订单",
+    "buyAgain": "再次购买",
+    "viewOrder": "查看",
+    "allOrders": "所有订单",
+    "completed": "已完成",
     "pending": "待处理",
     "processing": "处理中",
     "shipped": "已发货",
     "delivered": "已送达",
-    "cancelled": "已取消"
+    "cancelled": "已取消",
+    "noOrders": "未找到订单",
+    "noOrdersMessage": "您还没有下过订单。"
   },
   "profile": {
     "profile": "个人资料",
@@ -140,7 +147,12 @@
     "notifications": "通知",
     "privacy": "隐私",
     "security": "安全",
-    "changePassword": "修改密码"
+    "changePassword": "修改密码",
+    "fullName": "全名",
+    "city": "城市",
+    "state": "州",
+    "zip": "邮编",
+    "galleryImages": "画廊图片"
   },
   "footer": {
     "aboutUs": "关于我们",
@@ -158,6 +170,23 @@
     "faq": "常见问题",
     "returns": "退货",
     "shipping": "配送信息"
+  },
+  "contact": {
+    "contactSales": "联系销售",
+    "contactDescription": "联系我们的销售团队，解答您的任何疑问。",
+    "firstName": "名",
+    "lastName": "姓",
+    "company": "公司",
+    "email": "邮箱",
+    "phoneNumber": "电话号码",
+    "countryUS": "美国",
+    "countryCA": "加拿大",
+    "countryEU": "欧盟",
+    "phonePlaceholder": "123-456-7890",
+    "message": "消息",
+    "agreeToPolicy": "选择此项即表示您同意我们的",
+    "privacyPolicy": "隐私政策",
+    "submitButton": "让我们谈谈"
   },
   "messages": {
     "loginSuccess": "登录成功",

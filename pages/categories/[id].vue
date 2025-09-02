@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold mb-6">Category: {{ categoryName }}</h1>
+    <h1 class="text-2xl font-bold mb-6">{{ categoryName }}</h1>
 
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
@@ -8,7 +8,14 @@
       <ProductCard
         v-for="product in products"
         :key="product.id"
-        :product="product"
+        :product="{
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.images?.[0] || '/default.png',
+          stock: product.stock,
+          slug: product.slug,
+        }"
       />
     </div>
 
@@ -37,7 +44,9 @@ const fetchProductsByCategory = async () => {
     const res = await axios.get(
       `http://127.0.0.1:8000/api/products/category/${categoryId}`
     );
-    products.value = res.data;
+
+    // ensure it’s an array
+    products.value = Array.isArray(res.data) ? res.data : [];
 
     if (products.value.length > 0) {
       categoryName.value = products.value[0].category?.name || "Unknown";

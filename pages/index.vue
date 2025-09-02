@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-20">
+  <div class="flex flex-col gap-12 sm:gap-16 lg:gap-20 px-4 sm:px-6 lg:px-8">
     <Banner />
     <Slider />
     <!-- <TopSeller /> -->

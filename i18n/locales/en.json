@@ -32,6 +32,7 @@
     "submit": "Submit",
     "close": "Close",
     "open": "Open",
+    "retry": "Retry",
     "yes": "Yes",
     "no": "No",
     "ok": "OK",
@@ -123,11 +124,24 @@
     "placeOrder": "Place Order",
     "trackOrder": "Track Order",
     "cancelOrder": "Cancel Order",
+    "buyAgain": "Buy again",
+    "viewOrder": "View",
+    "allOrders": "All orders",
+    "completed": "Completed",
     "pending": "Pending",
     "processing": "Processing",
     "shipped": "Shipped",
     "delivered": "Delivered",
-    "cancelled": "Cancelled"
+    "cancelled": "Cancelled",
+    "noOrders": "No Orders Found",
+    "noOrdersMessage": "You haven't placed any orders yet.",
+    "billingAndDeliveryInfo": "Billing and Delivery Information",
+    "deliveryLocation": "Delivery Location",
+    "selectLocation": "Select Location",
+    "useCurrentLocation": "Use Current Location",
+    "chooseOnMap": "Choose on Map",
+    "locationSelected": "Location Selected",
+    "selectLocationFirst": "Please select a delivery location first"
   },
   "profile": {
     "profile": "Profile",
@@ -147,7 +161,12 @@
     "notifications": "Notifications",
     "privacy": "Privacy",
     "security": "Security",
-    "changePassword": "Change Password"
+    "changePassword": "Change Password",
+    "fullName": "Full Name",
+    "city": "City",
+    "state": "State",
+    "zip": "ZIP",
+    "galleryImages": "Gallery Images"
   },
   "footer": {
     "aboutUs": "About Us",
@@ -165,6 +184,23 @@
     "faq": "FAQ",
     "returns": "Returns",
     "shipping": "Shipping Info"
+  },
+  "contact": {
+    "contactSales": "Contact sales",
+    "contactDescription": "Get in touch with our sales team for any inquiries or questions.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "company": "Company",
+    "email": "Email",
+    "phoneNumber": "Phone number",
+    "countryUS": "US",
+    "countryCA": "CA",
+    "countryEU": "EU",
+    "phonePlaceholder": "123-456-7890",
+    "message": "Message",
+    "agreeToPolicy": "By selecting this, you agree to our",
+    "privacyPolicy": "privacy policy",
+    "submitButton": "Let's talk"
   },
   "messages": {
     "loginSuccess": "Login successful",

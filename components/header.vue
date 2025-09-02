@@ -1,6 +1,6 @@
 <template>
   <header class="sticky top-0 z-50 bg-white border-b border-gray-100">
-    <!-- Discount Banner for Non-logged-in Users -->
+    <!-- Discount Banner for Guests -->
     <div
       v-if="!user && showDiscountBanner"
       class="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-center py-2 sm:py-3 px-4 relative overflow-hidden"
@@ -40,7 +40,7 @@
     </div>
 
     <nav
-      class="mx-auto max-w-7xl flex items-center justify-between py-4 sm:py-5"
+      class="mx-auto max-w-7xl flex items-center justify-between py-4 sm:py-5 px-4 sm:px-6"
     >
       <!-- Logo -->
       <nuxt-link to="/" class="flex items-center">
@@ -49,7 +49,6 @@
           alt="Logo"
           class="h-12 rounded-full object-contain"
         />
-        <span class="font-bold text-xl text-gray-800"></span>
       </nuxt-link>
 
       <!-- Navigation Links -->
@@ -59,23 +58,23 @@
         <li>
           <nuxt-link
             :to="localePath('/')"
-            class="hover:text-blue-600 px-4 py-2 rounded-lg transition-colors duration-200 relative group"
-            >{{ $t("nav.home") }}
+            class="hover:text-blue-600 px-4 py-2 rounded-lg"
+          >
+            {{ $t("nav.home") }}
             <span
               class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"
             ></span>
           </nuxt-link>
         </li>
-        <!-- Dynamic Categories Mega Menu -->
+        <!-- Categories Mega Menu -->
         <li
           class="relative"
           @mouseenter="showCategoriesMenu = true"
           @mouseleave="showCategoriesMenu = false"
         >
           <button
-            class="hover:text-blue-600 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 relative group"
+            class="hover:text-blue-600 px-4 py-2 rounded-lg flex items-center gap-2"
             type="button"
-            tabindex="0"
             @click.stop="showCategoriesMenu = !showCategoriesMenu"
           >
             {{ $t("nav.categories") }}
@@ -95,11 +94,7 @@
                 d="M19 9l-7 7-7-7"
               />
             </svg>
-            <span
-              class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"
-            ></span>
           </button>
-          <!-- Mega Menu Dropdown -->
           <div
             v-show="showCategoriesMenu"
             class="absolute left-0 top-full mt-3 w-96 bg-white border border-gray-200 rounded-xl grid grid-cols-3 gap-4 p-6 z-50 animate-fade-in"
@@ -124,21 +119,17 @@
         <li>
           <nuxt-link
             :to="localePath('/products')"
-            class="hover:text-blue-600 px-4 py-2 rounded-lg transition-colors duration-200 relative group"
-            >{{ $t("nav.products") }}
-            <span
-              class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"
-            ></span>
+            class="hover:text-blue-600 px-4 py-2 rounded-lg"
+          >
+            {{ $t("nav.products") }}
           </nuxt-link>
         </li>
         <li>
           <nuxt-link
             :to="localePath('/contact')"
-            class="hover:text-blue-600 px-4 py-2 rounded-lg transition-colors duration-200 relative group"
-            >{{ $t("nav.contact") }}
-            <span
-              class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"
-            ></span>
+            class="hover:text-blue-600 px-4 py-2 rounded-lg"
+          >
+            {{ $t("nav.contact") }}
           </nuxt-link>
         </li>
       </ul>
@@ -172,121 +163,101 @@
           />
           <button
             type="submit"
-            class="ml-3 px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full hover:from-blue-600 hover:to-blue-700 transform transition-all duration-200 shadow-sm hover:shadow-md"
+            class="ml-3 px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full hover:from-blue-600 hover:to-blue-700 shadow-sm"
           >
             {{ $t("common.search") }}
           </button>
         </div>
       </form>
 
-      <!-- User, Favorites, Cart -->
+      <!-- User Section -->
       <div class="flex items-center gap-3 relative">
-        <!-- Favorites -->
+        <!-- Login button for guests -->
         <nuxt-link
-          to="/favourite"
-          class="relative p-3 rounded-full hover:bg-blue-50 transition-colors duration-200 group"
-          title="Favorites"
+          v-if="!user"
+          :to="localePath('/login')"
+          class="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-6 h-6 text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
-            />
-          </svg>
-          <span
-            v-if="favoriteCount > 0"
-            class="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center shadow-sm"
-          >
-            {{ favoriteCount }}
-          </span>
+          {{ $t("nav.login") }}
         </nuxt-link>
 
-        <!-- Cart -->
-        <button
-          @click="toggleCartModal"
-          class="relative p-3 rounded-full hover:bg-blue-50 transition-colors duration-200 group"
-          title="Shopping Cart"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-6 h-6 text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
+        <!-- Only show profile, favorites, cart if logged in -->
+        <template v-else>
+          <!-- Favorites -->
+          <nuxt-link
+            to="/favourite"
+            class="relative p-3 rounded-full hover:bg-blue-50 transition-colors duration-200 group"
+            title="Favorites"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M4 4h1.5L8 16h8l3.5-8H6.5M11 16a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
-            />
-          </svg>
-          <span
-            v-if="cartItems.length > 0"
-            class="absolute -top-1 -right-1 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center shadow-sm"
-          >
-            {{ cartItems.length }}
-          </span>
-        </button>
-
-        <!-- Profile Dropdown -->
-        <div class="relative">
-          <button
-            @click.stop="showDropdown = !showDropdown"
-            class="flex items-center gap-2 rounded-full hover:bg-blue-50 transition-colors duration-200 p-1"
-            title="User Menu"
-          >
-            <img
-              :src="user?.avatar || '/assets/placeholder.jpg'"
-              class="w-8 h-8 rounded-full object-cover border-2 border-gray-200"
-              alt="profile"
-            />
-            <!-- <span class="hidden lg:inline font-medium text-gray-700 ml-1">{{
-              user?.name || $t("nav.profile")
-            }}</span> -->
             <svg
-              :class="[
-                'w-4 h-4 text-gray-500 transition-transform duration-200',
-                showDropdown ? 'rotate-180' : '',
-              ]"
+              class="w-6 h-6 text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
               fill="none"
-              stroke="currentColor"
               viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
             >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
+                d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
               />
             </svg>
+            <span
+              v-if="favoriteCount > 0"
+              class="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center shadow-sm"
+            >
+              {{ favoriteCount }}
+            </span>
+          </nuxt-link>
+
+          <!-- Cart -->
+          <button
+            @click="toggleCartModal"
+            class="relative p-3 rounded-full hover:bg-blue-50 transition-colors duration-200 group"
+            title="Shopping Cart"
+          >
+            <svg
+              class="w-6 h-6 text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 4h1.5L8 16h8l3.5-8H6.5M11 16a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
+              />
+            </svg>
+            <span
+              v-if="cartItems.length > 0"
+              class="absolute -top-1 -right-1 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center shadow-sm"
+            >
+              {{ cartItems.length }}
+            </span>
           </button>
 
-          <div
-            v-show="showDropdown"
-            class="absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-xl shadow-xl py-2 z-50"
-          >
-            <div class="px-4 py-3 border-b border-gray-100">
-              <p class="text-sm font-medium text-gray-900">
-                {{ user?.name || "Guest" }}
-              </p>
-              <p class="text-sm text-gray-500">{{ user?.email || "" }}</p>
-            </div>
-            <nuxt-link
-              to="/profile"
-              class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors duration-200"
-              @click="showDropdown = false"
+          <!-- Profile Dropdown -->
+          <div class="relative">
+            <button
+              @click.stop="showDropdown = !showDropdown"
+              class="flex items-center gap-2 rounded-full hover:bg-blue-50 transition-colors duration-200 p-1"
+              title="User Menu"
             >
+              <img
+                :src="
+                  user?.avatar
+                    ? `http://127.0.0.1:8000${user.avatar}`
+                    : '/assets/placeholder.jpg'
+                "
+                class="w-8 h-8 rounded-full object-cover border-2 border-gray-200"
+                alt="profile"
+              />
               <svg
-                class="w-5 h-5"
+                :class="[
+                  'w-4 h-4 text-gray-500 transition-transform duration-200',
+                  showDropdown ? 'rotate-180' : '',
+                ]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -295,54 +266,45 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                ></path>
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
-              {{ $t("nav.profile") }}
-            </nuxt-link>
-            <nuxt-link
-              to="/orders"
-              class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors duration-200"
-              @click="showDropdown = false"
+            </button>
+            <div
+              v-show="showDropdown"
+              class="absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-xl shadow-xl py-2 z-50"
             >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              <div class="px-4 py-3 border-b border-gray-100">
+                <p class="text-sm font-medium text-gray-900">
+                  {{ user?.name }}
+                </p>
+                <p class="text-sm text-gray-500">{{ user?.email }}</p>
+              </div>
+              <nuxt-link
+                to="/profile"
+                class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors duration-200"
+                @click="showDropdown = false"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                ></path>
-              </svg>
-              {{ $t("order.orders") }}
-            </nuxt-link>
-            <div class="border-t border-gray-100 mt-2">
-              <button
-                @click="handleLogout"
-                class="flex items-center gap-3 w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors duration-200"
+                {{ $t("nav.profile") }}
+              </nuxt-link>
+              <nuxt-link
+                to="/orders"
+                class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors duration-200"
+                @click="showDropdown = false"
               >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                {{ $t("order.orders") }}
+              </nuxt-link>
+              <div class="border-t border-gray-100 mt-2">
+                <button
+                  @click="handleLogout"
+                  class="flex items-center gap-3 w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors duration-200"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  ></path>
-                </svg>
-                {{ $t("nav.logout") }}
-              </button>
+                  {{ $t("nav.logout") }}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </template>
 
         <!-- Language Switcher -->
         <LanguageSwitcher />

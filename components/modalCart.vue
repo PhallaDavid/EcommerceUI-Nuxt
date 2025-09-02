@@ -77,24 +77,50 @@
                     >
                       <span>Qty:</span>
                       <button
-                        class="px-2 py-1 border rounded hover:bg-gray-100"
+                        class="flex items-center justify-center w-8 h-8 border rounded hover:bg-gray-100 transition"
                         @click="updateQuantity(item, item.quantity - 1)"
                         :disabled="item.quantity <= 1"
                       >
-                        -
+                        <svg
+                          class="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M20 12H4"
+                          ></path>
+                        </svg>
                       </button>
                       <input
                         type="number"
                         v-model.number="item.quantity"
                         @change="updateQuantity(item, item.quantity)"
                         min="1"
-                        class="w-12 text-center border rounded"
+                        class="w-12 text-center border rounded transition"
                       />
                       <button
-                        class="px-2 py-1 border rounded hover:bg-gray-100"
+                        class="flex items-center justify-center w-8 h-8 border rounded hover:bg-gray-100 transition"
                         @click="updateQuantity(item, item.quantity + 1)"
                       >
-                        +
+                        <svg
+                          class="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 4v16m8-8H4"
+                          ></path>
+                        </svg>
                       </button>
                     </div>
                   </div>
@@ -102,8 +128,8 @@
                   <!-- Remove Button -->
                   <div class="flex justify-end mt-2">
                     <button
-                      class="font-medium text-red-500 hover:text-red-700"
-                      @click="removeFromCart(item.id)"
+                      class="font-medium text-red-500 hover:text-red-700 transition"
+                      @click="removeFromCart(item.product_id)"
                     >
                       Remove
                     </button>
@@ -131,7 +157,7 @@
             <!-- Checkout Button -->
             <div class="mt-4 flex justify-end">
               <button
-                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
                 @click="checkout"
                 :disabled="cartItems.length === 0"
               >
@@ -142,10 +168,23 @@
 
           <!-- Close Button -->
           <button
-            class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-3xl font-bold"
+            class="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
             @click="$emit('close')"
           >
-            &times;
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
           </button>
         </div>
       </div>
@@ -155,7 +194,13 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { cartItems, cartCount, token, fetchCart, addToCart } from "@/stores/cartStore";
+import {
+  cartItems,
+  cartCount,
+  token,
+  fetchCart,
+  addToCart,
+} from "@/stores/cartStore";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
@@ -163,10 +208,12 @@ const router = useRouter();
 const props = defineProps({ visible: Boolean });
 
 const totalAmount = computed(() =>
-  cartItems.value.reduce(
-    (sum, item) => sum + parseFloat(item.product.price) * item.quantity,
-    0
-  ).toFixed(2)
+  cartItems.value
+    .reduce(
+      (sum, item) => sum + parseFloat(item.product.price) * item.quantity,
+      0
+    )
+    .toFixed(2)
 );
 
 async function removeFromCart(id) {
@@ -175,8 +222,7 @@ async function removeFromCart(id) {
     await axios.delete(`http://127.0.0.1:8000/api/products/${id}/cart`, {
       headers: { Authorization: `Bearer ${token.value}` },
     });
-    cartItems.value = cartItems.value.filter((i) => i.id !== id);
-    cartCount.value = cartItems.value.reduce((sum, i) => sum + i.quantity, 0);
+    await fetchCart();
   } catch (err) {
     console.error(err);
   }
@@ -184,15 +230,19 @@ async function removeFromCart(id) {
 
 async function updateQuantity(item, qty) {
   if (qty < 1 || !token.value) return;
+  const oldQty = item.quantity;
+  item.quantity = qty;
+  cartCount.value = cartItems.value.reduce((sum, i) => sum + i.quantity, 0);
   try {
     await axios.put(
       `http://127.0.0.1:8000/api/products/${item.product_id}/cart`,
       { quantity: qty },
       { headers: { Authorization: `Bearer ${token.value}` } }
     );
-    item.quantity = qty;
-    cartCount.value = cartItems.value.reduce((sum, i) => sum + i.quantity, 0);
+    await fetchCart();
   } catch (err) {
+    item.quantity = oldQty;
+    cartCount.value = cartItems.value.reduce((sum, i) => sum + i.quantity, 0);
     console.error(err);
   }
 }
@@ -205,7 +255,6 @@ onMounted(() => {
   fetchCart();
 });
 </script>
-
 
 <style scoped>
 .slide-enter-active,

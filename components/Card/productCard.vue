@@ -2,7 +2,7 @@
   <div class="flex justify-center p-4">
     <div
       data-aos="fade-right"
-      class="flex w-65 h-auto flex-col gap-2 rounded-lg border border-gray-200 bg-gray-100 p-2 transition hover:shadow-lg"
+      class="flex w-80 h-auto flex-col gap-2 rounded-lg border border-gray-200 bg-gray-100 p-2 transition hover:shadow-lg"
     >
       <!-- Product Image -->
       <div class="relative">
@@ -184,13 +184,13 @@ import { token, addToCart as addCartItem, fetchCart } from "~/stores/cartStore";
 import { triggerToast } from "~/stores/toastStore";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useLocalePath } from '#imports'
+import { useLocalePath } from "#imports";
 
 export default {
   components: { Spinner },
   setup() {
-    const localePath = useLocalePath()
-    return { localePath }
+    const localePath = useLocalePath();
+    return { localePath };
   },
   props: { product: { type: Object, required: true } },
   data() {

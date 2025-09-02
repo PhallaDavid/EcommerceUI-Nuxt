@@ -1,102 +1,80 @@
 <template>
-  <div
-    class="w-full max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-auto overflow-hidden rounded-lg relative"
-  >
-    <div
-      v-if="loading"
-      class="animate-pulse w-full h-44 sm:h-60 md:h-[360px] lg:h-[400px] xl:h-[480px] bg-gray-200 rounded-lg relative"
-    ></div>
-
-    <!-- Banner Wrapper -->
-    <div
-      v-else
-      class="relative w-full h-44 sm:h-60 md:h-[360px] lg:h-[400px] xl:h-[480px]"
-    >
-      <transition-group name="fade" tag="div" class="w-full h-full relative">
-        <div
-          v-for="(banner, index) in bannersWithImages"
-          :key="banner.id"
-          v-show="index === currentIndex"
-          class="absolute inset-0 w-full h-full"
-        >
-          <img
-            :src="getBannerImageUrl(banner.images[0])"
-            :alt="banner.title || 'Banner Image'"
-            class="w-full h-full object-cover rounded-lg"
-            @error="onImageError($event)"
-          />
-          <!-- <div
-            class="absolute bottom-4 left-4 bg-black/50 text-white px-4 py-2 rounded"
-          >
-            {{ banner.title }}
-          </div> -->
-        </div>
-      </transition-group>
-    </div>
-    <button
-      @click="prevBanner"
-      class="absolute top-1/2 left-2 sm:left-4 -translate-y-1/2 p-1.5 sm:p-2 text-white bg-gray-800/80 hover:bg-gray-700/80 rounded-full z-10 transition-all duration-200"
-      :disabled="bannersWithImages.length === 0"
-      aria-label="Previous banner"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="w-4 h-4 sm:w-6 sm:h-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 19l-7-7 7-7"
-        />
-      </svg>
-    </button>
-
-    <!-- Next Button -->
-    <button
-      @click="nextBanner"
-      class="absolute top-1/2 right-2 sm:right-4 -translate-y-1/2 p-1.5 sm:p-2 text-white bg-gray-800/80 hover:bg-gray-700/80 rounded-full z-10 transition-all duration-200"
-      :disabled="bannersWithImages.length === 0"
-      aria-label="Next banner"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="w-4 h-4 sm:w-6 sm:h-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M9 5l7 7-7 7"
-        />
-      </svg>
-    </button>
-
-    <!-- Dots Navigation -->
-    <div
-      v-if="bannersWithImages.length > 1"
-      class="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex space-x-1.5 sm:space-x-2 z-10"
-    >
-      <button
+  <div id="controls-carousel" class="relative w-full" data-carousel="static">
+    <!-- Carousel wrapper -->
+    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+      <!-- Dynamic Items -->
+      <div
         v-for="(banner, index) in bannersWithImages"
-        :key="`dot-${banner.id}`"
-        @click="goToBanner(index)"
+        :key="banner.id"
         :class="[
-          'rounded-full transition-all duration-300',
-          'w-2 h-2 sm:w-3 sm:h-3',
-          index === currentIndex
-            ? 'bg-white scale-125 shadow-lg'
-            : 'bg-white/50 hover:bg-white/75',
+          'duration-700 ease-in-out',
+          currentIndex === index ? '' : 'hidden',
         ]"
-        :aria-label="`Go to banner ${index + 1}`"
-      ></button>
+        data-carousel-item
+      >
+        <img
+          :src="getBannerImageUrl(banner.images[0])"
+          class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 object-cover"
+          :alt="banner.title || 'Banner Image'"
+          @error="onImageError($event)"
+        />
+      </div>
     </div>
+
+    <!-- Slider controls -->
+    <button
+      type="button"
+      class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+      @click="prevBanner"
+    >
+      <span
+        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
+      >
+        <svg
+          class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 6 10"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 1 1 5l4 4"
+          />
+        </svg>
+        <span class="sr-only">Previous</span>
+      </span>
+    </button>
+
+    <button
+      type="button"
+      class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+      @click="nextBanner"
+    >
+      <span
+        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
+      >
+        <svg
+          class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 6 10"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m1 9 4-4-4-4"
+          />
+        </svg>
+        <span class="sr-only">Next</span>
+      </span>
+    </button>
   </div>
 </template>
 
@@ -157,9 +135,6 @@ export default {
       this.currentIndex =
         (this.currentIndex - 1 + this.bannersWithImages.length) %
         this.bannersWithImages.length;
-    },
-    goToBanner(index) {
-      this.currentIndex = index;
     },
     onImageError(event) {
       event.target.src = this.fallbackImage;
