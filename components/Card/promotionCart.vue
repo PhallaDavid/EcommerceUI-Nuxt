@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto bg-gray-100 rounded-lg p-4 relative">
+  <div class="max-w-7xl mx-auto bg-gray-50 rounded-lg p-4 relative">
     <!-- Header -->
     <div class="flex justify-between items-center mb-4 px-2">
       <p class="text-gray-800 text-sm font-semibold">
@@ -114,11 +114,14 @@ export default {
           "http://127.0.0.1:8000/api/products/promotion"
         );
         console.log("Fetched products:", res.data);
-        this.products = res.data.data || res.data; // handle API response shape
+
+        const productsData = res.data.data || res.data;
+        this.products = productsData.slice(0, 10);
       } catch (error) {
         console.error("Error fetching promotion products:", error);
       }
     },
+
     nextSlide() {
       if (this.currentIndex < this.maxIndex) this.currentIndex++;
     },
@@ -131,7 +134,6 @@ export default {
       else this.nextSlide();
     },
     updateMaxIndex() {
-      // recompute maxIndex on resize
       this.currentIndex = Math.min(this.currentIndex, this.maxIndex);
     },
   },

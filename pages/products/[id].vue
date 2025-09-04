@@ -363,6 +363,7 @@ export default {
       const t = token.value || localStorage.getItem("token");
       if (!t) {
         triggerToast("Please log in first");
+        this.$router.push("/login");
         return;
       }
 
@@ -398,6 +399,7 @@ export default {
       const t = token.value || localStorage.getItem("token");
       if (!t) {
         triggerToast("Please log in first");
+        this.$router.push("/login");
         return;
       }
 

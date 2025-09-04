@@ -2,7 +2,7 @@
   <div class="flex justify-center p-4">
     <div
       data-aos="fade-right"
-      class="flex w-80 h-auto flex-col gap-2 rounded-lg border border-gray-200 bg-gray-100 p-2 transition hover:shadow-lg"
+      class="flex w-full max-w-sm h-auto flex-col gap-2 rounded-lg border border-gray-200 bg-white p-4 transition hover:shadow-lg"
     >
       <!-- Product Image -->
       <div class="relative">
@@ -74,7 +74,7 @@
 
         <!-- Favorite toggle -->
         <span
-          class="absolute top-2 right-2 cursor-pointer"
+          class="absolute top-1 right-1 cursor-pointer"
           @click.stop="toggleFavorite"
           :title="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
         >
@@ -231,6 +231,7 @@ export default {
       const t = token.value || localStorage.getItem("token");
       if (!t) {
         triggerToast("Please log in first");
+        this.$router.push("/login");
         return;
       }
 
@@ -265,6 +266,7 @@ export default {
       const t = token.value || localStorage.getItem("token");
       if (!t) {
         triggerToast("Please log in first");
+        this.$router.push("/login");
         return;
       }
 

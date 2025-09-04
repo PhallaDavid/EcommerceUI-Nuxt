@@ -2,11 +2,13 @@
   <div class="max-w-7xl mx-auto relative">
     <!-- Header -->
     <div class="flex justify-between items-center mb-4">
-      <p class="text-gray-800 text-sm font-semibold">{{$t("nav.categories")}}</p>
+      <p class="text-gray-800 text-sm font-semibold">
+        {{ $t("nav.categories") }}
+      </p>
       <NuxtLink
         class="text-gray-800 text-sm font-semibold hover:underline"
         :to="localePath('/')"
-        >{{$t("nav.seeAll")}}</NuxtLink
+        >{{ $t("nav.seeAll") }}</NuxtLink
       >
     </div>
 
@@ -108,23 +110,26 @@ export default {
   data() {
     return {
       currentIndex: 0,
-      cardWidth: 256, // matches w-64
+      cardWidth: 256,
       categories: [],
-      visibleCards: 5, // default to 5
+      visibleCards: 5,
     };
   },
-computed: {
-  categoriesToShow() {
-    if (!this.categories || this.categories.length === 0) {
-      return []; // no categories at all
-    }
-    if (this.categories.length < 5) {
-      const repeatTimes = Math.ceil(5 / this.categories.length);
-      return [].concat(...Array(repeatTimes).fill(this.categories)).slice(0, 5);
-    }
-    return this.categories;
+  computed: {
+    categoriesToShow() {
+      if (!this.categories || this.categories.length === 0) {
+        return [];
+      }
+      if (this.categories.length < 5) {
+        const repeatTimes = Math.ceil(5 / this.categories.length);
+        return []
+          .concat(...Array(repeatTimes).fill(this.categories))
+          .slice(0, 5);
+      }
+      // ✅ Limit to 10 products only
+      return this.categories.slice(0, 10);
+    },
   },
-},
 
   created() {
     this.fetchCategories();

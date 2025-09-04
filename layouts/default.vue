@@ -9,18 +9,22 @@
           class="fixed top-0 left-0 w-64 h-full bg-gray-50 border-r border-gray-300 p-4 z-40 md:static md:block md:w-64"
         />
       </transition>
-      <main class="flex-1 max-w-7xl mx-auto flex flex-col justify-center items-center p-6">
+      <main
+        class="flex-1 max-w-7xl mx-auto flex flex-col justify-center items-center p-6"
+      >
         <slot />
       </main>
     </div>
+    <Socail />
 
-  <ToastMessage v-model:visible="toastVisible" :message="toastMessage" />
+    <ToastMessage v-model:visible="toastVisible" :message="toastMessage" />
     <Footer />
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import Socail from "~/components/socail.vue";
 import Sidebar from "~/components/sidebar.vue";
 import Header from "~/components/header.vue";
 import Footer from "~/components/footer.vue";
