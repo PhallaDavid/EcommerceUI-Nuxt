@@ -1,8 +1,8 @@
 <template>
-  <div class="flex justify-center p-4">
+  <div class="flex justify-center p-2 sm:p-4">
     <div
       data-aos="fade-right"
-      class="flex w-full max-w-sm h-auto flex-col gap-2 rounded-lg border border-gray-200 bg-white p-4 transition hover:shadow-lg"
+      class="flex w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto flex-col gap-2 rounded-lg border border-gray-100 p-3 sm:p-4 transition"
     >
       <!-- Product Image -->
       <div class="relative">
@@ -11,20 +11,20 @@
             v-if="product.images && product.images.length"
             :src="`http://127.0.0.1:8000${product.images[currentImage]}`"
             :alt="product.name"
-            class="rounded-lg object-cover w-full h-40 transition-transform duration-500 hover:scale-105"
+            class="rounded-lg object-cover w-full h-32 sm:h-40 md:h-48 lg:h-56 transition-transform duration-500 hover:scale-105"
           />
           <img
             v-else
             src="/assets/placeholder.jpg"
             alt="No image available"
-            class="w-full h-40 rounded-lg"
+            class="w-full h-32 sm:h-40 md:h-48 lg:h-56 rounded-lg"
           />
         </NuxtLink>
 
         <!-- Promotion Badge -->
         <span
           v-if="isOnPromotion"
-          class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded"
+          class="absolute top-0 left-0 bg-red-500 text-white text-xs sm:text-sm font-bold px-1 sm:px-2 py-0.5 sm:py-1 rounded"
         >
           Promotion {{ product.discount_percent || 10 }}%
         </span>
@@ -33,11 +33,11 @@
         <button
           v-if="product.images && product.images.length > 1"
           @click.stop="prevImage"
-          class="absolute left-2 top-1/2 transform -translate-y-1/2 rounded-full bg-gray-700 bg-opacity-50 p-1 text-white hover:bg-opacity-75 transition"
+          class="absolute left-1 sm:left-2 top-1/2 transform -translate-y-1/2 rounded-full bg-gray-700 bg-opacity-50 p-0.5 sm:p-1 text-white hover:bg-opacity-75 transition"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
+            class="h-4 w-4 sm:h-5 sm:w-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -54,11 +54,11 @@
         <button
           v-if="product.images && product.images.length > 1"
           @click.stop="nextImage"
-          class="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full bg-gray-700 bg-opacity-50 p-1 text-white hover:bg-opacity-75 transition"
+          class="absolute right-1 sm:right-2 top-1/2 transform -translate-y-1/2 rounded-full bg-gray-700 bg-opacity-50 p-0.5 sm:p-1 text-white hover:bg-opacity-75 transition"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
+            class="h-4 w-4 sm:h-5 sm:w-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -74,7 +74,7 @@
 
         <!-- Favorite toggle -->
         <span
-          class="absolute top-1 right-1 cursor-pointer"
+          class="absolute top-0.5 sm:top-1 right-0.5 sm:right-1 cursor-pointer"
           @click.stop="toggleFavorite"
           :title="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
         >
@@ -82,7 +82,7 @@
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             :class="[
-              'h-8 w-8 transition-colors duration-300',
+              'h-6 w-6 sm:h-8 sm:w-8 transition-colors duration-300',
               isFavorite
                 ? 'fill-red-500 stroke-red-600'
                 : 'fill-transparent stroke-blue-700 hover:fill-red-500 hover:stroke-red-600',
@@ -102,14 +102,14 @@
         <!-- Image indicators -->
         <div
           v-if="product.images && product.images.length > 1"
-          class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1"
+          class="absolute bottom-1 sm:bottom-2 left-1/2 transform -translate-x-1/2 flex gap-0.5 sm:gap-1"
         >
           <span
             v-for="(img, index) in product.images"
             :key="index"
             @click="currentImage = index"
             :class="[
-              'w-2 h-2 rounded-full cursor-pointer',
+              'w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full cursor-pointer',
               currentImage === index ? 'bg-blue-700' : 'bg-gray-200',
             ]"
           ></span>
@@ -117,40 +117,44 @@
       </div>
 
       <!-- Product Info -->
-      <div class="flex justify-between pr-2 pl-2">
+      <div class="flex justify-between pr-1 sm:pr-2 pl-1 sm:pl-2">
         <NuxtLink :to="localePath(`/products/${product.id}`)">
-          <h1 class="text-xl font-semibold text-gray-700 hover:underline">
+          <h1
+            class="text-lg sm:text-xl font-semibold text-gray-700 hover:underline"
+          >
             {{ product.name }}
           </h1>
         </NuxtLink>
-        <h1 class="text-sm font-semibold text-gray-700">
+        <h1 class="text-sm sm:text-base font-semibold text-gray-700">
           ${{ product.price }}
         </h1>
       </div>
-      <span class="pl-2 text-xs text-gray-600 line-clamp-2">
+      <span class="pl-1 sm:pl-2 text-xs sm:text-sm text-gray-600 line-clamp-2">
         {{ product.description }}
       </span>
 
       <!-- Rating -->
-      <div class="flex flex-row gap-1 pl-2">
+      <div class="flex flex-row gap-0.5 sm:gap-1 pl-1 sm:pl-2">
         <svg
           v-for="i in 5"
           :key="i"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
-          class="h-4 w-4"
+          class="h-3 w-3 sm:h-4 sm:w-4"
         >
           <polygon
             points="12,2 15,9 22,9 17,14 18.5,21 12,17 5.5,21 7,14 2,9 9,9"
             fill="#065f46"
           />
         </svg>
-        <span class="text-xs text-gray-600">({{ product.rating }})</span>
+        <span class="text-xs sm:text-sm text-gray-600"
+          >({{ product.rating }})</span
+        >
       </div>
 
       <!-- Add to Cart -->
       <button
-        class="mt-2 ml-2 self-start rounded-full bg-blue-800 p-2 font-semibold text-gray-200 hover:bg-blue-700 transition flex items-center gap-2"
+        class="mt-1 sm:mt-2 ml-1 sm:ml-2 self-start rounded-full bg-blue-800 p-1 sm:p-2 font-semibold text-gray-200 hover:bg-blue-700 transition flex items-center gap-1 sm:gap-2"
         @click="addToCart"
         :disabled="loading"
         aria-label="Add to Cart"
@@ -158,7 +162,7 @@
         <span v-if="!loading">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
+            class="h-4 w-4 sm:h-5 sm:w-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

@@ -219,5 +219,16 @@
     "passwordTooShort": "Password must be at least 6 characters",
     "passwordsNotMatch": "Passwords do not match",
     "loginDiscount": "Please login to get 10% discount"
+  },
+  "policy": {
+    "title": "Our Policy",
+    "freeShipping": "Free Shipping",
+    "freeShippingDesc": "Free shipping on all US orders above $200",
+    "support": "24/7 Support",
+    "supportDesc": "We are here to help you anytime",
+    "moneyBack": "Money Back",
+    "moneyBackDesc": "30 days money-back guarantee",
+    "securePayment": "Secure Payment",
+    "securePaymentDesc": "100% secure payment methods"
   }
 }

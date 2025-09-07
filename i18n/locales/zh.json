@@ -205,5 +205,16 @@
     "passwordTooShort": "密码至少需要6个字符",
     "passwordsNotMatch": "密码不匹配",
     "loginDiscount": "请登录以获得10%折扣"
+  },
+  "policy": {
+    "title": "我们的政策",
+    "freeShipping": "免费配送",
+    "freeShippingDesc": "美国订单超过$200免费配送",
+    "support": "24/7支持",
+    "supportDesc": "我们随时为您提供帮助",
+    "moneyBack": "退款保证",
+    "moneyBackDesc": "30天退款保证",
+    "securePayment": "安全支付",
+    "securePaymentDesc": "100%安全支付方式"
   }
 }

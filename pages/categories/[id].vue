@@ -1,9 +1,9 @@
 <template>
-  <div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="max-w-7xl mx-auto">
     <h1 class="text-2xl font-bold mb-6">{{ categoryName }}</h1>
 
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+      class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-1"
     >
       <ProductCard
         v-for="product in products"

@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto bg-gray-50 rounded-lg p-4 relative">
+  <div class="max-w-7xl mx-auto rounded-lg relative">
     <!-- Header -->
     <div class="flex justify-between items-center mb-4 px-2">
       <p class="text-gray-800 text-sm font-semibold">
@@ -21,7 +21,7 @@
         <div
           v-for="product in products"
           :key="product.id"
-          class="flex-shrink-0 w-64 sm:w-56 md:w-60 lg:w-64 px-2"
+          class="flex-shrink-0 w-full xs:w-1/1 sm:w-1/2 md:w-1/4 lg:w-1/3 xl:w-1/4 px-1 sm:px-2"
           data-aos="fade-right"
         >
           <ProductCard :product="product" />
@@ -31,11 +31,12 @@
       <!-- Navigation Buttons -->
       <button
         @click="prevSlide"
-        class="absolute top-1/2 left-2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 z-10"
+        v-if="products.length > visibleCards"
+        class="absolute top-1/2 left-0.5 sm:left-1 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-1.5 sm:p-2 rounded-full z-10 transition-all duration-200 shadow-lg"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="w-6 h-6"
+          class="w-5 h-5 sm:w-6 sm:h-6"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -48,14 +49,14 @@
           />
         </svg>
       </button>
-
       <button
         @click="nextSlide"
-        class="absolute top-1/2 right-2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 z-10"
+        v-if="products.length > visibleCards"
+        class="absolute top-1/2 right-1 -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full hover:bg-opacity-60 z-10"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="w-6 h-6"
+          class="w-5 h-5 sm:w-6 sm:h-6"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -89,23 +90,23 @@ export default {
     return {
       products: [],
       currentIndex: 0,
-      cardWidth: 280,
+      cardWidth: 0,
+      visibleCards: 1,
     };
   },
   computed: {
     maxIndex() {
-      const sliderWidth = this.$refs.slider?.offsetWidth || 0;
-      const visibleCards = Math.floor(sliderWidth / this.cardWidth);
-      return Math.max(this.products.length - visibleCards, 0);
+      return Math.max(this.products.length - this.visibleCards, 0);
     },
   },
   mounted() {
     this.fetchProducts();
     AOS.init({ duration: 700, once: true });
-    window.addEventListener("resize", this.updateMaxIndex);
+    this.$nextTick(() => this.calcCardWidth());
+    window.addEventListener("resize", this.calcCardWidth);
   },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.updateMaxIndex);
+  beforeUnmount() {
+    window.removeEventListener("resize", this.calcCardWidth);
   },
   methods: {
     async fetchProducts() {
@@ -113,15 +114,21 @@ export default {
         const res = await axios.get(
           "http://127.0.0.1:8000/api/products/promotion"
         );
-        console.log("Fetched products:", res.data);
-
-        const productsData = res.data.data || res.data;
-        this.products = productsData.slice(0, 10);
+        this.products = (res.data.data || res.data).slice(0, 10);
+        this.$nextTick(() => this.calcCardWidth());
       } catch (error) {
         console.error("Error fetching promotion products:", error);
       }
     },
-
+    calcCardWidth() {
+      if (!this.$refs.slider) return;
+      const cardEl = this.$refs.slider.querySelector(".flex-shrink-0");
+      if (!cardEl) return;
+      this.cardWidth = cardEl.offsetWidth;
+      const sliderWidth = this.$refs.slider.offsetWidth;
+      this.visibleCards = Math.floor(sliderWidth / this.cardWidth);
+      if (this.currentIndex > this.maxIndex) this.currentIndex = this.maxIndex;
+    },
     nextSlide() {
       if (this.currentIndex < this.maxIndex) this.currentIndex++;
     },
@@ -129,21 +136,9 @@ export default {
       if (this.currentIndex > 0) this.currentIndex--;
     },
     onWheel(event) {
-      event.preventDefault();
       if (event.deltaY < 0) this.prevSlide();
       else this.nextSlide();
-    },
-    updateMaxIndex() {
-      this.currentIndex = Math.min(this.currentIndex, this.maxIndex);
     },
   },
 };
 </script>
-
-<style scoped>
-@media (max-width: 768px) {
-  .w-\[280px\] {
-    width: 220px !important;
-  }
-}
-</style>
