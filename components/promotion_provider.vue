@@ -1,78 +1,80 @@
 <template>
-  <div class="p-4 max-w-2xl sm:max-w-3xl lg:max-w-7xl mx-auto">
-    <p class="text-lg font-semibold mb-4">{{ $t("policy.title") }}</p>
-
+  <div
+    ref="slider"
+    class="relative overflow-hidden"
+    @wheel.prevent="onWheel"
+    @touchstart="onTouchStart"
+    @touchmove="onTouchMove"
+  >
     <div
-      ref="slider"
-      class="relative overflow-hidden"
-      @wheel.prevent="onWheel"
-      @touchstart="onTouchStart"
-      @touchmove="onTouchMove"
+      class="flex transition-transform duration-500 ease-in-out"
+      :style="{ transform: `translateX(-${currentIndex * cardWidth}px)` }"
     >
       <div
-        class="flex transition-transform duration-500 ease-in-out"
-        :style="{ transform: `translateX(-${currentIndex * cardWidth}px)` }"
+        v-for="(promo, index) in promotions"
+        :key="index"
+        class="flex-shrink-0 p-2"
+        :class="cardClasses"
       >
         <div
-          v-for="(item, index) in policies"
-          :key="index"
-          class="flex-shrink-0 p-4"
-          :class="cardClasses"
+          class="flex flex-col items-center text-center rounded-lg transition transform p-4 sm:p-4 md:p-6"
+          :style="gradientStyle(promo.gradient)"
         >
-          <div
-            class="flex flex-col items-center text-center rounded-lg shadow-lg hover:scale-105 transition transform"
-            :style="gradientStyle(item.gradient)"
-          >
-            <img :src="item.icon" alt="" class="w-14 h-14 mb-2" />
-            <p class="font-medium text-white">{{ item.title }}</p>
-            <span class="text-sm text-white/80">{{ item.desc }}</span>
-          </div>
+          <img
+            :src="promo.image"
+            alt=""
+            class="w-12 h-12 mb-2 sm:w-12 sm:h-14"
+          />
+          <p class="font-medium text-white text-sm sm:text-base">
+            {{ promo.title }}
+          </p>
+          <span class="text-xs sm:text-sm text-white/80">{{ promo.desc }}</span>
         </div>
       </div>
-
-      <!-- Navigation Buttons -->
-      <button
-        v-if="policies.length > visibleCards"
-        @click="prevSlide"
-        class="absolute top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 sm:p-3 rounded-full z-20 left-1 sm:left-2"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-4 sm:w-5 h-4 sm:h-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-      </button>
-
-      <button
-        v-if="policies.length > visibleCards"
-        @click="nextSlide"
-        class="absolute top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 sm:p-3 rounded-full z-20 right-1 sm:right-2"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-4 sm:w-5 h-4 sm:h-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5l7 7-7 7"
-          />
-        </svg>
-      </button>
     </div>
+
+    <!-- Buttons -->
+    <button
+      v-show="promotions.length > 1"
+      @click="prevSlide"
+      class="absolute top-1/2 -translate-y-1/2 left-5 bg-opacity-50 hover:bg-opacity-70 text-white p-2 sm:p-3 rounded-full z-50"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-4 h-4 sm:w-5 sm:h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
+    </button>
+
+    <button
+      v-show="promotions.length > 1"
+      @click="nextSlide"
+      class="absolute top-1/2 -translate-y-1/2 right-5 sm:right-24 md:right-8  bg-opacity-50 hover:bg-opacity-70 text-white p-2 sm:p-3 rounded-full z-50"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-4 h-4 sm:w-5 sm:h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5l7 7-7 7"
+        />
+      </svg>
+    </button>
   </div>
 </template>
 
@@ -80,29 +82,29 @@
 export default {
   data() {
     return {
-      policies: [
+      promotions: [
         {
-          icon: "/assets/free-delivery.png",
-          title: this.$t("policy.freeShipping"),
-          desc: this.$t("policy.freeShippingDesc"),
+          image: "/assets/shopping.png",
+          title: "Big Sale",
+          desc: "Up to 50% off",
           gradient: ["#FF7E5F", "#FEB47B"],
         },
         {
-          icon: "/assets/encrypted-phone.png",
-          title: this.$t("policy.support"),
-          desc: this.$t("policy.supportDesc"),
+          image: "/assets/new-arrivals.png",
+          title: "New Arrivals",
+          desc: "Latest products",
           gradient: ["#6A82FB", "#FC5C7D"],
         },
         {
-          icon: "/assets/cash-back.png",
-          title: this.$t("policy.moneyBack"),
-          desc: this.$t("policy.moneyBackDesc"),
+          image: "/assets/flash-deal.png",
+          title: "Flash Deal",
+          desc: "Limited time offer",
           gradient: ["#43C6AC", "#F8FFAE"],
         },
         {
-          icon: "/assets/credit-card.png",
-          title: this.$t("policy.securePayment"),
-          desc: this.$t("policy.securePaymentDesc"),
+          image: "/assets/special-tag.png",
+          title: "Special Offer",
+          desc: "Exclusive discounts",
           gradient: ["#FF512F", "#DD2476"],
         },
       ],
@@ -114,17 +116,15 @@ export default {
   },
   computed: {
     maxIndex() {
-      return Math.max(this.policies.length - this.visibleCards, 0);
+      return Math.max(this.promotions.length - this.visibleCards, 0);
     },
     cardClasses() {
-      return "w-full sm:w-1/2 md:w-1/3 lg:w-1/4";
+      return "w-[100%] sm:w-1/2 md:w-1/3 lg:w-1/4 mx-auto"; // small mobile card width
     },
   },
   mounted() {
-    this.$nextTick(() => {
-      this.updateCardWidth();
-      window.addEventListener("resize", this.updateCardWidth);
-    });
+    this.updateCardWidth();
+    window.addEventListener("resize", this.updateCardWidth);
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.updateCardWidth);
@@ -153,8 +153,7 @@ export default {
       if (this.currentIndex > 0) this.currentIndex--;
     },
     onWheel(event) {
-      if (event.deltaY < 0) this.prevSlide();
-      else this.nextSlide();
+      event.deltaY < 0 ? this.prevSlide() : this.nextSlide();
     },
     onTouchStart(event) {
       this.touchStartX = event.touches[0].clientX;
@@ -163,8 +162,7 @@ export default {
       const touchEndX = event.touches[0].clientX;
       const diff = this.touchStartX - touchEndX;
       if (Math.abs(diff) > 50) {
-        if (diff > 0) this.nextSlide();
-        else this.prevSlide();
+        diff > 0 ? this.nextSlide() : this.prevSlide();
         this.touchStartX = touchEndX;
       }
     },
